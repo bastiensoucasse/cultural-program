@@ -4,25 +4,17 @@ import java.time.LocalDate;
 
 public class Play extends Event {
     private final String title;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
 
-    public Play(final String title, final LocalDate startDate, final LocalDate endDate, final int capacity) {
-        super(capacity);
+    public Play(final String title, final LocalDate startDate, final LocalDate endDate, final TimeSlot slot, final int capacity) {
+        super(slot, capacity);
         this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
+
+        for (LocalDate date = startDate; date.isBefore(endDate) || date.equals(endDate); date = date.plusDays(1))
+            super.addDate(date);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
+    @Override
+    public String toString() {
+        return "Play " + title + " " + super.toString();
     }
 }

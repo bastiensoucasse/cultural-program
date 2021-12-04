@@ -18,4 +18,21 @@ public class TimeSlot {
     public LocalTime getEndTime() {
         return endTime;
     }
+
+    public boolean overlap(final TimeSlot other) {
+        if (other.getStartTime().isAfter(startTime))
+            if (!other.getStartTime().isAfter(endTime))
+                return true;
+        
+        if (other.getEndTime().isBefore(endTime))
+            if (!other.getEndTime().isBefore(startTime))
+                return true;
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return startTime + " to " + endTime;
+    }
 }
