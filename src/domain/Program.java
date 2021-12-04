@@ -61,7 +61,8 @@ public class Program {
 
         for (int i = 0; i < NUMBER_OF_VENUES; i++) {
             Map<DayOfWeek, TimeSlot> slots = new HashMap<>();
-            for (DayOfWeek day : DayOfWeek.values()) slots.put(day, new TimeSlot(LocalTime.of(19, 0), LocalTime.of(23, 0)));
+            for (DayOfWeek day : DayOfWeek.values())
+                slots.put(day, new TimeSlot(LocalTime.of(19, 0), LocalTime.of(23, 0)));
             venueList.add(new Venue(1500, slots));
         }
     }

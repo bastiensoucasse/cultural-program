@@ -14,10 +14,9 @@ public abstract class Event {
     private Venue venue = null;
 
     public Event(final TimeSlot slot, final int capacity) {
-        this.id = numEvents;
+        this.id = ++numEvents;
         this.slot = slot;
         this.capacity = capacity;
-        numEvents++;
     }
 
     public int getId() {

@@ -14,11 +14,10 @@ public class Venue {
     private boolean empty = true;
 
     public Venue(final int capacity, final Map<DayOfWeek, TimeSlot> slots) {
-        this.id = numVenues;
+        this.id = ++numVenues;
         this.name = "Venue " + numVenues;
         this.capacity = capacity;
         this.slots = slots;
-        numVenues++;
     }
 
     public int getCapacity() {
