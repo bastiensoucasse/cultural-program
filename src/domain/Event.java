@@ -1,8 +1,8 @@
 package domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 public abstract class Event {
     private static int numEvents = 0;
@@ -51,7 +51,7 @@ public abstract class Event {
     @Override
     public String toString() {
         if (venue == null)
-            return dates + " " + slot + " with " + capacity + " attenders" + " (no venue assigned)";
+            return dates + " " + slot + " with " + capacity + " attenders";
         return dates + " " + slot + " with " + capacity + " attenders" + " at " + venue;
     }
 }

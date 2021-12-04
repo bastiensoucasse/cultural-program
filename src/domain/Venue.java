@@ -1,6 +1,8 @@
 package domain;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Map;
 
 public class Venue {
     private static int numVenues = 0;
@@ -8,10 +10,10 @@ public class Venue {
     private final int id;
     private final String name;
     private final int capacity;
-    private final TimeSlot[] slots;
+    private final Map<DayOfWeek, TimeSlot> slots;
     private boolean empty = true;
 
-    public Venue(final int capacity, final TimeSlot[] slots) {
+    public Venue(final int capacity, final Map<DayOfWeek, TimeSlot> slots) {
         this.id = numVenues;
         this.name = "Venue " + numVenues;
         this.capacity = capacity;
@@ -23,8 +25,8 @@ public class Venue {
         return capacity;
     }
 
-    public boolean isOpened(final int day, final TimeSlot slot) {
-        final LocalTime open = slots[day - 1].getStartTime(), close = slots[day - 1].getEndTime(), start = slot.getStartTime(), end = slot.getEndTime();
+    public boolean isOpened(final DayOfWeek day, final TimeSlot slot) {
+        final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(), start = slot.getStartTime(), end = slot.getEndTime();
         return (start.equals(open) || start.isAfter(open)) && (end.isBefore(close) || end.equals(close));
     }
 
