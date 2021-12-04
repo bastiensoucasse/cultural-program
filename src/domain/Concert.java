@@ -1,22 +1,22 @@
 package domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Concert extends Event {
-    private final Date date;
     private final String artist;
+    private final LocalDate date;
 
-    public Concert(final Date date, final String artist, final int capacity) {
+    public Concert(final String artist, final LocalDate date, final int capacity) {
         super(capacity);
-        this.date = date;
         this.artist = artist;
-    }
-
-    public Date getDate() {
-        return date;
+        this.date = date;
     }
 
     public String getArtist() {
         return artist;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }
