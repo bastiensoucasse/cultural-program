@@ -20,13 +20,7 @@ public class TimeSlot {
     }
 
     public boolean overlap(final TimeSlot other) {
-        if (other.getStartTime().isAfter(startTime) && !other.getStartTime().isAfter(endTime))
-            return true;
-
-        if (other.getEndTime().isBefore(endTime) && !other.getEndTime().isBefore(startTime))
-            return true;
-
-        return false;
+        return other.getStartTime().isAfter(startTime) && !other.getStartTime().isAfter(endTime) || other.getEndTime().isBefore(endTime) && !other.getEndTime().isBefore(startTime);
     }
 
     @Override
