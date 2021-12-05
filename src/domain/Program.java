@@ -16,6 +16,7 @@ public class Program {
     private final List<Venue> venueList = new ArrayList<>(NUMBER_OF_VENUES);
     private boolean canUseNewVenue = true;
     private final List<Event> eventList = new ArrayList<>();
+    private Event removedEvent = null;
 
     public Program(final int id) {
         this.id = id;
@@ -34,7 +35,7 @@ public class Program {
         if (counter == NUMBER_OF_VENUES - 1) canUseNewVenue = false;
     }
 
-    private Pair<boolean, Event> venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
+    private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
         // Check venue capacity
         if (venue.getCapacity() < event.getCapacity()) return false;
 
@@ -53,7 +54,7 @@ public class Program {
                         if (!modify) return false;
 
                         if (event.getClass() == Concert.class && e.getClass() == Play.class && !e.getVenue().doesHostConcert()) {
-                            System.out.println("[WARNING] We have to remove " + e + "!");
+                            removedEvent = e;
                             eventList.remove(e);
                             return true;
                         }
@@ -61,10 +62,10 @@ public class Program {
                 }
         }
 
-        return new Pair.which(!modify, null);
+        return !modify;
     }
 
-    private Pair<boolean, Event> venueCanHostEvent(final Venue venue, final Event event) {
+    private boolean venueCanHostEvent(final Venue venue, final Event event) {
         return venueCanHostEvent(venue, event, false);
     }
 
@@ -106,6 +107,10 @@ public class Program {
             venue.setHostConcert(true);
 
         System.out.println("hosted in " + venue + ".");
+        if (removedEvent != null) {
+            System.out.println("[WARNING] Had to remove " + removedEvent + "!");
+            removedEvent = null;
+        }
         return true;
     }
 
