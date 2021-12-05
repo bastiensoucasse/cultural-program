@@ -13,6 +13,7 @@ public class Venue {
     private final int capacity;
     private final Map<DayOfWeek, TimeSlot> slots;
     private boolean empty = true;
+    private boolean hostConcert = false;
 
     public Venue(final int capacity, final Map<DayOfWeek, TimeSlot> slots) {
         this.id = ++numVenues;
@@ -36,6 +37,14 @@ public class Venue {
 
     public void setEmpty(final boolean empty) {
         this.empty = empty;
+    }
+
+    public boolean doesHostConcert() {
+        return hostConcert;
+    }
+
+    public void setHostConcert(final boolean hostConcert) {
+        this.hostConcert = hostConcert;
     }
 
     @Override

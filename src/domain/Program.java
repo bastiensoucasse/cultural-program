@@ -34,7 +34,7 @@ public class Program {
         if (counter == NUMBER_OF_VENUES - 1) canUseNewVenue = false;
     }
 
-    private boolean venueCanHostEvent(final Venue venue, final Event event) {
+    private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
         // Check venue capacity
         if (venue.getCapacity() < event.getCapacity()) {
             System.out.println(venue + " capacity too low.");
@@ -54,18 +54,41 @@ public class Program {
             for (Event e : eventList)
                 for (LocalDate d : e.getDates()) {
                     DayOfWeek dow = d.getDayOfWeek();
+
                     if (e.getVenue().equals(venue) && dow.equals(day) && e.getTimeSlot().overlap(event.getTimeSlot())) {
-                        System.out.println(venue + " not available.");
-                        return false;
+                        if (!modify) {
+                            System.out.println(venue + " not available.");
+                            return false;
+                        }
+
+                        if (event.getClass() == Concert.class && e.getClass() == Play.class && !e.getVenue().doesHostConcert()) {
+                            System.out.println("[WARNING] We have to remove " + e + "!");
+                            eventList.remove(e);
+                            return true;
+                        }
                     }
                 }
         }
 
-        return true;
+        return !modify;
+    }
+
+    private boolean venueCanHostEvent(final Venue venue, final Event event) {
+        return venueCanHostEvent(venue, event, false);
     }
 
     private Venue findVenue(final Event event) {
-        return venueList.stream().filter(venue -> (!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event)).findFirst().orElse(null);
+        // return venueList.stream().filter(venue -> (!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event)).findFirst().orElse(null);
+
+        for (Venue venue : venueList)
+            if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event))
+                return venue;
+
+        for (Venue venue : venueList)
+            if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event, true))
+                return venue;
+
+        return null;
     }
 
     public int getId() {
@@ -88,12 +111,18 @@ public class Program {
             if (canUseNewVenue) updateCanUseNewVenues();
         }
 
+        if (event.getClass() == Concert.class && !venue.doesHostConcert())
+            venue.setHostConcert(true);
+
         System.out.println("Hosted in " + venue + ".");
         return true;
     }
 
     @Override
     public String toString() {
-        return name + ": " + eventList;
+        String s = name + ": ";
+        for (Event e : eventList)
+            s += "\n - " + e;
+        return s;
     }
 }
