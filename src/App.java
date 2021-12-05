@@ -8,10 +8,10 @@ public class App {
     private static final int YEAR = 2022;
 
     public static void main(String[] args) {
-        Event c1 = new Concert("Eminem", LocalDate.of(YEAR, 1, 1), new TimeSlot(LocalTime.of(20, 0), LocalTime.of(22, 30)), 1500);
+        Event c1 = new Concert("Eminem", LocalDate.of(YEAR, 1, 1), new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 00)), 1500);
         Event c2 = new Concert("Jack & Jack", LocalDate.of(YEAR, 1, 1), new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 0)), 1000);
-        Event p1 = new Play("High School Musical", LocalDate.of(YEAR, 1, 1), LocalDate.of(YEAR, 1, 5), new TimeSlot(LocalTime.of(19, 30), LocalTime.of(21, 30)), 800); // remettre 21h pile pour tester
-        Event c3 = new Concert("One Direction", LocalDate.of(YEAR, 1, 1), new TimeSlot(LocalTime.of(20, 0), LocalTime.of(22, 0)), 1500);
+        Event p1 = new Play("High School Musical", LocalDate.of(YEAR, 1, 1), LocalDate.of(YEAR, 1, 5), new TimeSlot(LocalTime.of(19, 30), LocalTime.of(21, 30)), 800);
+        Event c3 = new Concert("One Direction", LocalDate.of(YEAR, 1, 1), new TimeSlot(LocalTime.of(18, 0), LocalTime.of(21, 0)), 1500);
 
         Program week1 = new Program(1);
         week1.add(c1);

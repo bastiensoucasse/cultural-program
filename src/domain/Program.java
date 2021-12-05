@@ -24,7 +24,7 @@ public class Program {
         for (int i = 0; i < NUMBER_OF_VENUES; i++) {
             Map<DayOfWeek, TimeSlot> slots = new EnumMap<>(DayOfWeek.class);
             for (DayOfWeek day : DayOfWeek.values())
-                slots.put(day, new TimeSlot(LocalTime.of(19, 0), LocalTime.of(23, 0)));
+                slots.put(day, new TimeSlot(LocalTime.of(18, 0), LocalTime.of(23, 0)));
             venueList.add(new Venue(1500, slots));
         }
     }
@@ -34,21 +34,15 @@ public class Program {
         if (counter == NUMBER_OF_VENUES - 1) canUseNewVenue = false;
     }
 
-    private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
+    private Pair<boolean, Event> venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
         // Check venue capacity
-        if (venue.getCapacity() < event.getCapacity()) {
-            System.out.println(venue + " capacity too low.");
-            return false;
-        }
+        if (venue.getCapacity() < event.getCapacity()) return false;
 
         for (LocalDate date : event.getDates()) {
             DayOfWeek day = date.getDayOfWeek();
 
             // Check venue opening hours
-            if (!venue.isOpened(day, event.getTimeSlot())) {
-                System.out.println(venue + " not opened.");
-                return false;
-            }
+            if (!venue.isOpened(day, event.getTimeSlot())) return false;
 
             // Check venue events
             for (Event e : eventList)
@@ -56,10 +50,7 @@ public class Program {
                     DayOfWeek dow = d.getDayOfWeek();
 
                     if (e.getVenue().equals(venue) && dow.equals(day) && e.getTimeSlot().overlap(event.getTimeSlot())) {
-                        if (!modify) {
-                            System.out.println(venue + " not available.");
-                            return false;
-                        }
+                        if (!modify) return false;
 
                         if (event.getClass() == Concert.class && e.getClass() == Play.class && !e.getVenue().doesHostConcert()) {
                             System.out.println("[WARNING] We have to remove " + e + "!");
@@ -70,10 +61,10 @@ public class Program {
                 }
         }
 
-        return !modify;
+        return new Pair.which(!modify, null);
     }
 
-    private boolean venueCanHostEvent(final Venue venue, final Event event) {
+    private Pair<boolean, Event> venueCanHostEvent(final Venue venue, final Event event) {
         return venueCanHostEvent(venue, event, false);
     }
 
@@ -96,11 +87,11 @@ public class Program {
     }
 
     public boolean add(final Event event) {
-        System.out.println("- " + event);
+        System.out.print("- " + event + ": ");
 
         final Venue venue = findVenue(event);
         if (venue == null) {
-            System.out.println("No venue can host…");
+            System.out.println("no venue can host.");
             return false;
         }
 
@@ -114,13 +105,13 @@ public class Program {
         if (event.getClass() == Concert.class && !venue.doesHostConcert())
             venue.setHostConcert(true);
 
-        System.out.println("Hosted in " + venue + ".");
+        System.out.println("hosted in " + venue + ".");
         return true;
     }
 
     @Override
     public String toString() {
-        String s = name + ": ";
+        String s = "\n" + name + ": ";
         for (Event e : eventList)
             s += "\n - " + e;
         return s;
