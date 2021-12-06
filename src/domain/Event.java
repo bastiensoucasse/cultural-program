@@ -12,7 +12,6 @@ public abstract class Event {
     private final List<LocalDate> dates = new ArrayList<>();
     private final TimeSlot slot;
     private final int capacity;
-    private Venue venue = null;
 
     protected Event(final TimeSlot slot, final int capacity) {
         this.id = ++numEvents;
@@ -20,12 +19,12 @@ public abstract class Event {
         this.capacity = capacity;
     }
 
-    public List<LocalDate> getDates() {
-        return dates;
+    protected void addDate(final LocalDate date) {
+        dates.add(date);
     }
 
-    void addDate(final LocalDate date) {
-        dates.add(date);
+    public List<LocalDate> getDates() {
+        return dates;
     }
 
     public TimeSlot getTimeSlot() {
@@ -34,14 +33,6 @@ public abstract class Event {
 
     public int getCapacity() {
         return capacity;
-    }
-
-    public Venue getVenue() {
-        return venue;
-    }
-
-    public void setVenue(final Venue venue) {
-        this.venue = venue;
     }
 
     @Override
@@ -59,7 +50,6 @@ public abstract class Event {
 
     @Override
     public String toString() {
-        if (venue == null) return dates + " " + slot + " with " + capacity + " attenders";
-        return dates + " " + slot + " with " + capacity + " attenders" + " at " + venue;
+        return dates + " " + slot + " with " + capacity + " attenders";
     }
 }

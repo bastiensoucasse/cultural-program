@@ -5,18 +5,21 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Program {
     private static final int NUMBER_OF_VENUES = 4;
+    private static final List<Venue> venueList = new ArrayList<>(NUMBER_OF_VENUES);
 
-    private final int id;
+    private final int id; // Week number
     private final String name;
-    private final List<Venue> venueList = new ArrayList<>(NUMBER_OF_VENUES);
+    private final Map<Event, Map<LocalDate, Venue>> eventMap = new HashMap<>();
+    
+    private Map<Venue, Integer> numConcertsInVenues = new HashMap<>(NUMBER_OF_VENUES);
+    private List<Event> removedEvents = new ArrayList<>();
     private boolean canUseNewVenue = true;
-    private final List<Event> eventList = new ArrayList<>();
-    private Event removedEvent = null;
 
     public Program(final int id) {
         this.id = id;
@@ -35,52 +38,110 @@ public class Program {
         if (counter == NUMBER_OF_VENUES - 1) canUseNewVenue = false;
     }
 
-    private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
-        // Check venue capacity
-        if (venue.getCapacity() < event.getCapacity()) return false;
+    // private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
+    //     // Check venue capacity
+    //     if (venue.getCapacity() < event.getCapacity()) return false;
 
+    //     for (LocalDate date : event.getDates()) {
+    //         DayOfWeek day = date.getDayOfWeek();
+
+    //         // Check venue opening hours
+    //         if (!venue.isOpened(day, event.getTimeSlot())) return false;
+
+    //         // Check venue events
+    //         for (Event e : eventMap.keySet()) {
+    //             for (LocalDate d : e.getDates()) {
+    //                 DayOfWeek dow = d.getDayOfWeek();
+
+    //                 if (eventMap.get(e).equals(venue) && dow.equals(day) && e.getTimeSlot().overlap(event.getTimeSlot())) {
+    //                     if (!modify) return false;
+
+    //                     if (event.getClass() == Concert.class && e.getClass() == Play.class && !eventMap.get(e).doesHostConcert()) {
+    //                         removedEvent = e;
+    //                         eventMap.remove(e);
+    //                         return true;
+    //                     }
+    //                 }
+    //             }
+
+    //             if (modify && event.getClass() == Play.class && e.getClass() == Play.class && event.getDates().size() > e.getDates().size()) {
+    //                 List<LocalDate> overdates = overlapDates(event.getDates(), e.getDates());
+    //                 if (overdates.size() > 0) // s'il y a des dates dates qui dépassent
+    //                     for (LocalDate overdate : overdates) // pour chaque date qui dépasse
+    //                         for (Event ev : eventMap.keySet()) // pour chaque évènement
+    //                             if (ev.getDates().contains(overdate)) // si la date qui dépasse est prise par l'évènement 
+    //                                 return false;
+    //             }
+    //         }
+    //     }
+
+    //     return !modify;
+    // }
+
+    // private List<LocalDate> overlapDates(List<LocalDate> newDates, List<LocalDate> oldDates) {
+    //     List<LocalDate> overdates = new ArrayList<>();
+
+    //     if (newDates.get(0).isBefore(oldDates.get(0)))
+    //         for (LocalDate d : newDates) {
+    //             if (d.equals(oldDates.get(0)))
+    //                 return overdates;
+    //             overdates.add(d);
+    //         }
+        
+    //     boolean add = false;
+    //     for (LocalDate d : newDates) {
+    //         if (add) overdates.add(d);
+    //         if (d.equals(oldDates.get(oldDates.size()-1))) add = true;
+    //     }
+        
+    //     return overdates;
+    // }
+
+    // private boolean venueCanHostEvent(final Venue venue, final Event event) {
+    //     return venueCanHostEvent(venue, event, false);
+    // }
+
+    // private Venue findVenue(final Event event) {
+    //     for (Venue venue : venueList)
+    //         if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event))
+    //             return venue;
+
+    //     for (Venue venue : venueList)
+    //         if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event, true))
+    //             return venue;
+
+    //     return null;
+    // }
+
+    private Map<LocalDate,Venue> findVenues(final Event event) {
+        Map<LocalDate, Venue> dateVenue = new HashMap<>();
         for (LocalDate date : event.getDates()) {
-            DayOfWeek day = date.getDayOfWeek();
-
-            // Check venue opening hours
-            if (!venue.isOpened(day, event.getTimeSlot())) return false;
-
-            // Check venue events
-            for (Event e : eventList)
-                for (LocalDate d : e.getDates()) {
-                    DayOfWeek dow = d.getDayOfWeek();
-
-                    if (e.getVenue().equals(venue) && dow.equals(day) && e.getTimeSlot().overlap(event.getTimeSlot())) {
-                        if (!modify) return false;
-
-                        if (event.getClass() == Concert.class && e.getClass() == Play.class && !e.getVenue().doesHostConcert()) {
-                            removedEvent = e;
-                            eventList.remove(e);
-                            return true;
+            boolean found = false;
+            for (Venue venue : venueList) {
+                for (Event e : eventMap.keySet())
+                    if (eventMap.get(e).get(date).equals(venue)) {
+                        dateVenue.put(date, venue);
+                        found = true;
+                        break;
+                    }
+                if (found) break; 
+            }
+            if (!found) {
+                for (Venue venue : venueList) {
+                    for (Event e : eventMap.keySet()) {
+                        // if (event.getClass() == Concert.class) Nothing to
+                        if (event.getClass() == Play.class) {
+                            if (e.getClass() == Concert.class) {
+                                
+                            }
                         }
                     }
+                    
+                        
                 }
+            }
+            
         }
-
-        return !modify;
-    }
-
-    private boolean venueCanHostEvent(final Venue venue, final Event event) {
-        return venueCanHostEvent(venue, event, false);
-    }
-
-    private Venue findVenue(final Event event) {
-        // return venueList.stream().filter(venue -> (!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event)).findFirst().orElse(null);
-
-        for (Venue venue : venueList)
-            if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event))
-                return venue;
-
-        for (Venue venue : venueList)
-            if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event, true))
-                return venue;
-
-        return null;
     }
 
     public int getId() {
@@ -90,35 +151,22 @@ public class Program {
     public boolean add(final Event event) {
         System.out.print("- " + event + ": ");
 
-        final Venue venue = findVenue(event);
-        if (venue == null) {
-            System.out.println("no venue can host.");
+        final Map<LocalDate, Venue> venues = findVenues(event);
+        if (venues.isEmpty()) {
+            System.out.println("No venue can host");
             return false;
         }
 
-        eventList.add(event);
-        event.setVenue(venue);
-        if (venue.isEmpty()) {
-            venue.setEmpty(false);
-            if (canUseNewVenue) updateCanUseNewVenues();
-        }
-
-        if (event.getClass() == Concert.class && !venue.doesHostConcert())
-            venue.setHostConcert(true);
-
-        System.out.println("hosted in " + venue + ".");
-        if (removedEvent != null) {
-            System.out.println("[WARNING] Had to remove " + removedEvent + "!");
-            removedEvent = null;
-        }
+        // TODO: Removed events
+    
         return true;
     }
 
     @Override
     public String toString() {
         String s = "\n" + name + ": ";
-        for (Event e : eventList)
-            s += "\n - " + e;
+        for (Event e : eventMap.keySet())
+            s += "\n - " + e + " at " + eventMap.get(e);
         return s;
     }
 }
