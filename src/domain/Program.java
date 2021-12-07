@@ -17,9 +17,9 @@ public class Program {
     private final String name;
     private final Map<Event, Map<LocalDate, Venue>> eventMap = new HashMap<>();
     
-    private Map<Venue, Integer> numConcertsInVenues = new HashMap<>(NUMBER_OF_VENUES);
+    private Map<Venue, Integer> numConcerts = new HashMap<>(NUMBER_OF_VENUES);
+    private Map<Venue, Integer> numPlays = new HashMap<>(NUMBER_OF_VENUES);
     private List<Event> removedEvents = new ArrayList<>();
-    private boolean canUseNewVenue = true;
 
     public Program(final int id) {
         this.id = id;
@@ -33,9 +33,14 @@ public class Program {
         }
     }
 
-    private void updateCanUseNewVenues() {
-        int counter = (int) venueList.stream().filter(v -> !v.isEmpty()).count();
-        if (counter == NUMBER_OF_VENUES - 1) canUseNewVenue = false;
+    private boolean canUseNewVenue() {
+        int emptyVenues = 0;
+
+        for (Venue venue : venueList)
+            if (numConcerts.get(venue) == 0 && numPlays.get(venue) == 0)
+                emptyVenues++;
+
+        return emptyVenues > 1;
     }
 
     // private boolean venueCanHostEvent(final Venue venue, final Event event, final boolean modify) {
@@ -113,35 +118,45 @@ public class Program {
     //     return null;
     // }
 
+    private void removeEvents(List<Event> toRemove) {
+        for (Event e : toRemove)
+            eventMap.remove(e);
+    }
+
     private Map<LocalDate,Venue> findVenues(final Event event) {
         Map<LocalDate, Venue> dateVenue = new HashMap<>();
+        // List<Event> removedEvents = new ArrayList<>(); // Set as attribute
+
         for (LocalDate date : event.getDates()) {
-            boolean found = false;
             for (Venue venue : venueList) {
+                // Check if venue is available
+                boolean available = true;
                 for (Event e : eventMap.keySet())
-                    if (eventMap.get(e).get(date).equals(venue)) {
-                        dateVenue.put(date, venue);
-                        found = true;
-                        break;
-                    }
-                if (found) break; 
+                    if (eventMap.get(e).get(date).equals(venue))
+                        available = false;
+                if (available)
+                    dateVenue.put(date, venue);
             }
-            if (!found) {
+
+
+            if (!dateVenue.containsKey(date)) {
                 for (Venue venue : venueList) {
                     for (Event e : eventMap.keySet()) {
                         // if (event.getClass() == Concert.class) Nothing to
-                        if (event.getClass() == Play.class) {
-                            if (e.getClass() == Concert.class) {
-                                
-                            }
+                        if (event.getClass() == Play.class
+                        && ((e.getClass() == Concert.class && numConcertsInVenues.get(venue) > 1)
+                        || (e.getClass() == Play.class && event.getDates().size() > e.getDates().size()))) {
+                            dateVenue.put(date, venue);
+                            removedEvents.add(e);
+                            break;
                         }
-                    }
-                    
-                        
+                    }                        
                 }
             }
-            
         }
+    
+        removeEvents(removedEvents);
+        return dateVenue;
     }
 
     public int getId() {
