@@ -12,8 +12,6 @@ public class Venue {
     private final String name;
     private final int capacity;
     private final Map<DayOfWeek, TimeSlot> slots;
-    private boolean empty = true;
-    private boolean hostConcert = false;
 
     public Venue(final int capacity, final Map<DayOfWeek, TimeSlot> slots) {
         this.id = ++numVenues;
@@ -27,30 +25,17 @@ public class Venue {
     }
 
     public boolean isOpened(final DayOfWeek day, final TimeSlot slot) {
-        final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(), start = slot.getStartTime(), end = slot.getEndTime();
+        final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(),
+                start = slot.getStartTime(), end = slot.getEndTime();
         return (start.equals(open) || start.isAfter(open)) && (end.isBefore(close) || end.equals(close));
-    }
-
-    public boolean isEmpty() {
-        return empty;
-    }
-
-    public void setEmpty(final boolean empty) {
-        this.empty = empty;
-    }
-
-    public boolean doesHostConcert() {
-        return hostConcert;
-    }
-
-    public void setHostConcert(final boolean hostConcert) {
-        this.hostConcert = hostConcert;
     }
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         final Venue venue = (Venue) o;
         return id == venue.id;
     }

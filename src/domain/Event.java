@@ -37,8 +37,10 @@ public abstract class Event {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Event event = (Event) o;
         return id == event.id;
     }
@@ -50,6 +52,6 @@ public abstract class Event {
 
     @Override
     public String toString() {
-        return dates + " " + slot + " with " + capacity + " attenders";
+        return "(" + capacity + " attenders): " + slot;
     }
 }
