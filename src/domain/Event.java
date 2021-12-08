@@ -5,6 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
+import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+
+@JsonTypeInfo(use = NAME, include = PROPERTY)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Concert.class, name = "Concert"),
+        @JsonSubTypes.Type(value = Play.class, name = "Play")
+})
 public abstract class Event {
     private static int numEvents = 0;
 
@@ -21,6 +32,10 @@ public abstract class Event {
 
     protected void addDate(final LocalDate date) {
         dates.add(date);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public List<LocalDate> getDates() {

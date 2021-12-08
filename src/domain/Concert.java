@@ -8,11 +8,16 @@ public class Concert extends Event {
     public Concert(final String artist, final LocalDate date, final TimeSlot slot, final int capacity) {
         super(slot, capacity);
         this.artist = artist;
-        super.addDate(date);
+
+        addDate(date);
+    }
+
+    public String getArtist() {
+        return artist;
     }
 
     @Override
     public String toString() {
-        return "Concert of " + artist + " " + super.toString();
+        return "Concert of " + super.toString();
     }
 }

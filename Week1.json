@@ -1,0 +1,648 @@
+{
+  "id" : 1,
+  "name" : "Program #1",
+  "venueList" : [ {
+    "id" : 1,
+    "name" : "Venue 1",
+    "capacity" : 1500,
+    "slots" : {
+      "MONDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "TUESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "WEDNESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "THURSDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "FRIDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SATURDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SUNDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      }
+    }
+  }, {
+    "id" : 2,
+    "name" : "Venue 2",
+    "capacity" : 1500,
+    "slots" : {
+      "MONDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "TUESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "WEDNESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "THURSDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "FRIDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SATURDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SUNDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      }
+    }
+  }, {
+    "id" : 3,
+    "name" : "Venue 3",
+    "capacity" : 1500,
+    "slots" : {
+      "MONDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "TUESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "WEDNESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "THURSDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "FRIDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SATURDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SUNDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      }
+    }
+  }, {
+    "id" : 4,
+    "name" : "Venue 4",
+    "capacity" : 1500,
+    "slots" : {
+      "MONDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "TUESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "WEDNESDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "THURSDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "FRIDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SATURDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      },
+      "SUNDAY" : {
+        "startTime" : {
+          "hour" : 18,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        },
+        "endTime" : {
+          "hour" : 23,
+          "minute" : 0,
+          "second" : 0,
+          "nano" : 0
+        }
+      }
+    }
+  } ],
+  "eventMap" : {
+    "Play (1000 attenders): 21:00 to 22:00" : {
+      "2022-01-02" : {
+        "id" : 1,
+        "name" : "Venue 1",
+        "capacity" : 1500,
+        "slots" : {
+          "MONDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "TUESDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "WEDNESDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "THURSDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "FRIDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "SATURDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "SUNDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          }
+        }
+      },
+      "2022-01-01" : {
+        "id" : 1,
+        "name" : "Venue 1",
+        "capacity" : 1500,
+        "slots" : {
+          "MONDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "TUESDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "WEDNESDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "THURSDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "FRIDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "SATURDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          },
+          "SUNDAY" : {
+            "startTime" : {
+              "hour" : 18,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            },
+            "endTime" : {
+              "hour" : 23,
+              "minute" : 0,
+              "second" : 0,
+              "nano" : 0
+            }
+          }
+        }
+      }
+    }
+  },
+  "removedEvents" : [ ],
+  "numConcerts" : {
+    "Venue 1" : 0,
+    "Venue 2" : 0,
+    "Venue 3" : 0,
+    "Venue 4" : 0
+  },
+  "numPlays" : {
+    "Venue 1" : 2,
+    "Venue 2" : 0,
+    "Venue 3" : 0,
+    "Venue 4" : 0
+  }
+}

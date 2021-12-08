@@ -30,16 +30,16 @@ public class EventUI extends AbstractUI {
 
 
         if (eventType == 0) // should not be -1
-            System.out.print("Enter date (yyyy-mm-dd): ");
+            System.out.print("Enter date (MM-dd): ");
         else 
-            System.out.print("Enter first date of representation (yyyy-mm-dd): ");
+            System.out.print("Enter first date of representation (MM-dd): ");
 
         LocalDate date = LocalDate.parse(YEAR + "-" + retrieveInfo());
 
         LocalDate endDate = null;
         if (eventType == 1) {
-            System.out.print("Enter last date of representation (yyyy-mm-dd): ");
-            endDate = LocalDate.parse(retrieveInfo());
+            System.out.print("Enter last date of representation (MM-dd): ");
+            endDate = LocalDate.parse(YEAR + "-" + retrieveInfo());
         }
         
         

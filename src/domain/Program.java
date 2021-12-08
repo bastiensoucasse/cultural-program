@@ -122,8 +122,28 @@ public class Program {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public List<Venue> getVenueList() {
+        return venueList;
+    }
+
+    public Map<Event, Map<LocalDate, Venue>> getEventMap() {
+        return eventMap;
+    }
+
     public List<Event> getRemovedEvents() {
         return removedEvents;
+    }
+
+    public Map<Venue, Integer> getNumConcerts() {
+        return numConcerts;
+    }
+
+    public Map<Venue, Integer> getNumPlays() {
+        return numPlays;
     }
 
     public void clearRemovedEvents() {
@@ -147,7 +167,6 @@ public class Program {
 
         return true;
     }
-    
 
     @Override
     public String toString() {

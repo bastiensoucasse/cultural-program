@@ -20,13 +20,24 @@ public class Venue {
         this.slots = slots;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public int getCapacity() {
         return capacity;
     }
 
+    public Map<DayOfWeek, TimeSlot> getSlots() {
+        return slots;
+    }
+
     public boolean isOpened(final DayOfWeek day, final TimeSlot slot) {
-        final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(),
-                start = slot.getStartTime(), end = slot.getEndTime();
+        final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(), start = slot.getStartTime(), end = slot.getEndTime();
         return (start.equals(open) || start.isAfter(open)) && (end.isBefore(close) || end.equals(close));
     }
 
