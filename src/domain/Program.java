@@ -31,88 +31,6 @@ public class Program {
         }
     }
 
-    // private boolean venueCanHostEvent(final Venue venue, final Event event, final
-    // boolean modify) {
-    // // Check venue capacity
-    // if (venue.getCapacity() < event.getCapacity()) return false;
-
-    // for (LocalDate date : event.getDates()) {
-    // DayOfWeek day = date.getDayOfWeek();
-
-    // // Check venue opening hours
-    // if (!venue.isOpened(day, event.getTimeSlot())) return false;
-
-    // // Check venue events
-    // for (Event e : eventMap.keySet()) {
-    // for (LocalDate d : e.getDates()) {
-    // DayOfWeek dow = d.getDayOfWeek();
-
-    // if (eventMap.get(e).equals(venue) && dow.equals(day) &&
-    // e.getTimeSlot().overlap(event.getTimeSlot())) {
-    // if (!modify) return false;
-
-    // if (event.getClass() == Concert.class && e.getClass() == Play.class &&
-    // !eventMap.get(e).doesHostConcert()) {
-    // removedEvent = e;
-    // eventMap.remove(e);
-    // return true;
-    // }
-    // }
-    // }
-
-    // if (modify && event.getClass() == Play.class && e.getClass() == Play.class &&
-    // event.getDates().size() > e.getDates().size()) {
-    // List<LocalDate> overdates = overlapDates(event.getDates(), e.getDates());
-    // if (overdates.size() > 0) // s'il y a des dates dates qui dépassent
-    // for (LocalDate overdate : overdates) // pour chaque date qui dépasse
-    // for (Event ev : eventMap.keySet()) // pour chaque évènement
-    // if (ev.getDates().contains(overdate)) // si la date qui dépasse est prise par
-    // l'évènement
-    // return false;
-    // }
-    // }
-    // }
-
-    // return !modify;
-    // }
-
-    // private List<LocalDate> overlapDates(List<LocalDate> newDates,
-    // List<LocalDate> oldDates) {
-    // List<LocalDate> overdates = new ArrayList<>();
-
-    // if (newDates.get(0).isBefore(oldDates.get(0)))
-    // for (LocalDate d : newDates) {
-    // if (d.equals(oldDates.get(0)))
-    // return overdates;
-    // overdates.add(d);
-    // }
-
-    // boolean add = false;
-    // for (LocalDate d : newDates) {
-    // if (add) overdates.add(d);
-    // if (d.equals(oldDates.get(oldDates.size()-1))) add = true;
-    // }
-
-    // return overdates;
-    // }
-
-    // private boolean venueCanHostEvent(final Venue venue, final Event event) {
-    // return venueCanHostEvent(venue, event, false);
-    // }
-
-    // private Venue findVenue(final Event event) {
-    // for (Venue venue : venueList)
-    // if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event))
-    // return venue;
-
-    // for (Venue venue : venueList)
-    // if ((!venue.isEmpty() || canUseNewVenue) && venueCanHostEvent(venue, event,
-    // true))
-    // return venue;
-
-    // return null;
-    // }
-
     private boolean canUseNewVenue() {
         int emptyVenues = 0;
 
@@ -200,36 +118,23 @@ public class Program {
         return dateVenue;
     }
 
-    private void removeEvents() {
-        if (removedEvents.size() == 0) return;
-        System.out.print("Removed events: ");
-
-        boolean first = true;
-        for (Event e : removedEvents) {
-            if (first) first = false;
-            else System.out.print(", ");
-            System.out.print(e);
-
-            eventMap.remove(e);
-        }
-
-        System.out.println(".");
-        removedEvents.clear();
-    }
-
     public int getId() {
         return id;
     }
 
-    public boolean add(final Event event) {
-        System.out.print("- " + event + ": ");
+    public List<Event> getRemovedEvents() {
+        return removedEvents;
+    }
 
+    public void clearRemovedEvents() {
+        if (removedEvents.size() == 0) return;
+        for (Event e : removedEvents) eventMap.remove(e);
+        removedEvents.clear();
+    }
+
+    public boolean add(final Event event) {
         final Map<LocalDate, Venue> venues = findVenues(event);
-        if (venues.isEmpty()) {
-            System.out.println("not hosted. ¬");
-            removeEvents();
-            return false;
-        }
+        if (venues.isEmpty()) return false;
 
         for (Map.Entry<LocalDate, Venue> entry : venues.entrySet()) {
             if (event.getClass() == Play.class)
@@ -239,11 +144,10 @@ public class Program {
         }
 
         eventMap.put(event, venues);
-        System.out.println("hosted. √");
 
-        removeEvents();
         return true;
     }
+    
 
     @Override
     public String toString() {

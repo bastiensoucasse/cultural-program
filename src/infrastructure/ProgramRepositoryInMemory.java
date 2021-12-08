@@ -16,6 +16,6 @@ public class ProgramRepositoryInMemory implements ProgramRepository {
 
     @Override
     public Program findProgramById(final int id) {
-        return programMap.get(id);
+        return programMap.getOrDefault(id, null);
     }
 }
