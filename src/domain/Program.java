@@ -1,7 +1,6 @@
 package domain;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,16 +101,17 @@ public class Program {
     }
 
     /**
-     * Finds a free venue at a given date and time slot.
+     * Finds a free venue at a given date and time slot for a given capacity.
      *
      * @param date …
      * @param slot …
+     * @param capacity …
      * @return …
      */
-    private Venue findFreeVenue(final LocalDate date, final TimeSlot slot) {
+    private Venue findFreeVenue(final LocalDate date, final TimeSlot slot, final int capacity) {
         for (final Venue venue : venueList) {
-            // If the venue is closed or not available, check the next one
-            if (!venue.isOpened(date.getDayOfWeek(), slot) || !venueIsAvailable(venue, date)) continue;
+            // If the venue is closed, can't host for such capacity, or not available, check the next one
+            if (!venue.isOpened(date.getDayOfWeek(), slot)  || !venue.canHost(capacity) || !venueIsAvailable(venue, date)) continue;
 
             // If the venue is not empty, we can use this one
             if (!venueIsEmpty(venue)) return venue;
@@ -134,7 +134,7 @@ public class Program {
 
         // Adds the venue found for each date
         for (final LocalDate date : event.getDates()) {
-            final Venue venue = findFreeVenue(date, event.getTimeSlot());
+            final Venue venue = findFreeVenue(date, event.getSlot(), event.getCapacity());
             if (venue != null) venues.put(date, venue);
         }
 
@@ -169,10 +169,7 @@ public class Program {
      * @return …
      */
     private boolean eventsContainsInstanceOf(final List<Event> events, Class<?> clazz) {
-        // If there is at least one of such class, it's true
-        for (final Event e : events)
-            if (e.getClass() == clazz) return true;
-
+        for (final Event e : events) if (e.getClass() == clazz) return true;
         return false;
     }
 
@@ -185,6 +182,10 @@ public class Program {
      */
     private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
         final List<Event> overlapEvents = getOverlapEvents(event, venue);
+
+        // If the venue can't host for such capacity or is closed, NO
+        if (!venue.canHost(event.getCapacity())) return false;
+        for (final LocalDate d : event.getDates()) if (!venue.isOpened(d.getDayOfWeek(), event.getSlot())) return false;
 
         // We want to add a concert
         if (event instanceof Concert) {
@@ -402,12 +403,11 @@ public class Program {
         if (venues.isEmpty()) return false;
 
         for (Map.Entry<LocalDate, Venue> entry : venues.entrySet()) {
+            if (event.getClass() == Concert.class) numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
             if (event.getClass() == Play.class) numPlays.replace(entry.getValue(), numPlays.get(entry.getValue()) + 1);
-            else numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
         }
 
         eventMap.put(event, venues);
-
         return true;
     }
 
@@ -417,14 +417,13 @@ public class Program {
         for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet()) {
             final Event event = entry.getKey();
             final Map<LocalDate, Venue> dateVenueMap = entry.getValue();
-            s.append("\n - ").append(event.toStringWithoutDates()).append(" on ");
+            s.append("\n - ").append(event).append(", at respectively ");
             boolean first = true;
             for (final Entry<LocalDate, Venue> entry1 : dateVenueMap.entrySet()) {
                 if (first) first = false;
                 else s.append(", ");
-                final LocalDate date = entry1.getKey();
                 final Venue venue = entry1.getValue();
-                s.append(date.format(DateTimeFormatter.ofPattern("EEEE MM/dd/yyyy"))).append(" at ").append(venue);
+                s.append(venue);
             }
             s.append(".");
         }

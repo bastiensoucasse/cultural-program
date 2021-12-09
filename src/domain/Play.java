@@ -9,10 +9,12 @@ import java.time.LocalDate;
  * @author Iantsa Provost
  */
 public class Play extends Event {
+    private static final int PRIORITY = 2;
+
     private final String title;
 
     public Play(final String title, final LocalDate startDate, final LocalDate endDate, final TimeSlot slot, final int capacity) {
-        super(slot, capacity);
+        super(PRIORITY, capacity, slot);
         this.title = title;
 
         for (LocalDate date = startDate; date.isBefore(endDate) || date.equals(endDate); date = date.plusDays(1))
@@ -29,7 +31,4 @@ public class Play extends Event {
     public String toString() {
         return "Play " + title + ", " + super.toString();
     }
-
-    @Override
-    public String toStringWithoutDates() { return "Play " + title + ", " + super.toStringWithoutDates(); }
 }

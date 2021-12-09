@@ -43,6 +43,10 @@ public class Venue {
         return slots;
     }
 
+    public boolean canHost(final int capacity) {
+        return capacity <= this.capacity;
+    }
+
     public boolean isOpened(final DayOfWeek day, final TimeSlot slot) {
         final LocalTime open = slots.get(day).getStartTime(), close = slots.get(day).getEndTime(), start = slot.getStartTime(), end = slot.getEndTime();
         return (start.equals(open) || start.isAfter(open)) && (end.isBefore(close) || end.equals(close));

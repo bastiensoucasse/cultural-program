@@ -27,38 +27,52 @@ public abstract class Event {
     private static transient int numEvents = 0;
 
     private final int id;
-    private final List<LocalDate> dates = new ArrayList<>();
-    private final TimeSlot slot;
-    private final int capacity;
+    private final int priority;
+    private int capacity;
+    private TimeSlot slot;
+    private List<LocalDate> dates = new ArrayList<>();
 
-    protected Event(final TimeSlot slot, final int capacity) {
+    protected Event(final int priority, final int capacity, final TimeSlot slot) {
         this.id = ++numEvents;
-        this.slot = slot;
+        this.priority = priority;
         this.capacity = capacity;
+        this.slot = slot;
     }
 
     public int getId() {
         return id;
     }
 
-    public List<LocalDate> getDates() {
-        return dates;
-    }
-
-    public void addDate(final LocalDate date) {
-        dates.add(date);
-    }
-
-    public void removeDate(final LocalDate date) {
-        dates.remove(date);
-    }
-
-    public TimeSlot getTimeSlot() {
-        return slot;
+    public int getPriority() {
+        return priority;
     }
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public TimeSlot getSlot() {
+        return slot;
+    }
+
+    public void setSlot(TimeSlot slot) {
+        this.slot = slot;
+    }
+
+    public List<LocalDate> getDates() {
+        return dates;
+    }
+
+    public void setDates(final List<LocalDate> dates) {
+        this.dates = dates;
+    }
+
+    public void addDate(final LocalDate date) {
+        dates.add(date);
     }
 
     /**
@@ -93,11 +107,6 @@ public abstract class Event {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    @Override
     public String toString() {
         StringBuilder s = new StringBuilder("(" + capacity + " attenders), " + slot + ", on ");
         boolean first = true;
@@ -106,11 +115,6 @@ public abstract class Event {
             else s.append(", ");
             s.append(d.format(DateTimeFormatter.ofPattern("EEEE M/d/yyyy")));
         }
-        s.append(".");
         return s.toString();
-    }
-
-    public String toStringWithoutDates() {
-        return "(" + capacity + " attenders), " + slot;
     }
 }

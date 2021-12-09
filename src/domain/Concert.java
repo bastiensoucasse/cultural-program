@@ -9,10 +9,12 @@ import java.time.LocalDate;
  * @author Iantsa Provost
  */
 public class Concert extends Event {
+    private static final int PRIORITY = 1;
+
     private final String artist;
 
     public Concert(final String artist, final LocalDate date, final TimeSlot slot, final int capacity) {
-        super(slot, capacity);
+        super(PRIORITY, capacity, slot);
         this.artist = artist;
 
         addDate(date);
@@ -24,11 +26,6 @@ public class Concert extends Event {
 
     @Override
     public String toString() {
-        return "Concert of " + artist + ", " + super.toString();
-    }
-
-    @Override
-    public String toStringWithoutDates() {
         return "Concert of " + artist + ", " + super.toString();
     }
 }
