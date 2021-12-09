@@ -144,15 +144,14 @@ public class EventUI extends AbstractUI {
         return newList;
     }
 
-  
+
     /**
      * Ask user if they want to reschedule events that could not find a venue still (probably because the week is full)
      * or delete the event (giving up on trying and scheduling it)
-     * 
+     *
      * @param eventList
-     * @return Map that associates the decision to delete or not, to an event
-     *         True means the event is cancelled
-     *         False otherwise
+     * @return Map that associates the decision to delete or not, to an event.
+     *         true means the event is cancelled; false otherwise
      */
 
     public static Map<Event, Boolean> giveUpOnEvents(List<Event> eventList) {
@@ -175,10 +174,9 @@ public class EventUI extends AbstractUI {
     /**
      * Ask user to choose a new capacity for a given event
      * or cancel it
-     * 
+     *
      * @param event
-     * @return New capacity if given
-     *         -1 otherwise.
+     * @return New capacity if given; -1 otherwise.
      */
     public static int tooLargeCapacity(Event event) {
         System.out.println("\n*** TOO LARGE CAPACITY EVENT ***");
@@ -189,8 +187,7 @@ public class EventUI extends AbstractUI {
         if (retrieveInfo().charAt(0) == 'y') {
             System.out.print("Enter new capacity: ");
             capacity = Integer.parseInt(retrieveInfo());
-        } else
-            capacity = -1;
+        } else capacity = -1;
 
         return capacity;
     }

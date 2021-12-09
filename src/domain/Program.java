@@ -19,10 +19,9 @@ public class Program {
     private final String name;
     private final List<Venue> venueList;
     private final Map<Event, Map<LocalDate, Venue>> eventMap = new HashMap<>();
-
-    private transient List<Event> removedEvents = new ArrayList<>();
     private final transient Map<Venue, Integer> numConcerts;
     private final transient Map<Venue, Integer> numPlays;
+    private transient List<Event> removedEvents = new ArrayList<>();
 
     public Program(final int id, final List<Venue> venueList) {
         this.id = id;
@@ -103,15 +102,16 @@ public class Program {
     /**
      * Finds a free venue at a given date and time slot for a given capacity.
      *
-     * @param date …
-     * @param slot …
+     * @param date     …
+     * @param slot     …
      * @param capacity …
      * @return …
      */
     private Venue findFreeVenue(final LocalDate date, final TimeSlot slot, final int capacity) {
         for (final Venue venue : venueList) {
             // If the venue is closed, can't host for such capacity, or not available, check the next one
-            if (!venue.isOpened(date.getDayOfWeek(), slot)  || !venue.canHost(capacity) || !venueIsAvailable(venue, date)) continue;
+            if (!venue.isOpened(date.getDayOfWeek(), slot) || !venue.canHost(capacity) || !venueIsAvailable(venue, date))
+                continue;
 
             // If the venue is not empty, we can use this one
             if (!venueIsEmpty(venue)) return venue;
@@ -463,7 +463,8 @@ public class Program {
         if (venues.isEmpty()) return false;
 
         for (Map.Entry<LocalDate, Venue> entry : venues.entrySet()) {
-            if (event.getClass() == Concert.class) numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
+            if (event.getClass() == Concert.class)
+                numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
             if (event.getClass() == Play.class) numPlays.replace(entry.getValue(), numPlays.get(entry.getValue()) + 1);
         }
 

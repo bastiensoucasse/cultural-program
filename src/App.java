@@ -36,12 +36,19 @@ public class App {
         return venues;
     }
 
+    private static List<Event> defaultEvents() {
+        return new ArrayList<>(List.of(
+                // TODO: Add test events as default events.
+        ));
+    }
+
     public static void main(String[] args) {
         // Launch and initialize the venues and events
         AppUI.launch();
         List<Venue> venueList = VenueUI.retrieveAllVenues();
         if (venueList.isEmpty()) venueList = defaultVenues();
         List<Event> eventList = EventUI.retrieveAllEvents();
+        if (eventList.isEmpty()) eventList = defaultEvents();
         List<Event> newEvents = new ArrayList<>();
 
         // Try to add each event
