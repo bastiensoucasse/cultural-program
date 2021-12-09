@@ -1,4 +1,6 @@
 {
-    "java.project.sourcePaths": ["src"],
-    "java.project.outputPath": "out/production/cultural-program"
+  "java.project.sourcePaths": [
+    "src"
+  ],
+  "java.project.outputPath": "out/production/cultural-program"
 }

@@ -65,7 +65,7 @@ public class VenueUI extends AbstractUI {
         int option = Integer.parseInt(retrieveInfo());
 
         List<Venue> venueList = new ArrayList<>();
-        if (option == 1)  for (int i = 0; i < 4; i++) venueList.add(retrieveVenue());
+        if (option == 1) for (int i = 0; i < 4; i++) venueList.add(retrieveVenue());
 
         return venueList;
     }

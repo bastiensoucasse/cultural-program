@@ -252,7 +252,8 @@ public class Program {
      */
     private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
         // If the venue is the empty one, can't host for such capacity, or is closed, NO
-        if (venueIsEmpty(venue)) return false; // If we are here, and we find the empty one, it means it's the reserved one.
+        if (venueIsEmpty(venue))
+            return false; // If we are here, and we find the empty one, it means it's the reserved one.
         if (!venue.canHost(event.getCapacity())) return false;
         for (final LocalDate d : event.getDates()) if (!venue.isOpened(d.getDayOfWeek(), event.getSlot())) return false;
 

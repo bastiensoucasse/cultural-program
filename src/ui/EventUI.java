@@ -111,7 +111,7 @@ public class EventUI extends AbstractUI {
             System.out.println("1. Cancel");
             System.out.print("Enter an option: ");
 
-            if (Integer.parseInt(retrieveInfo()) == 1) continue ;
+            if (Integer.parseInt(retrieveInfo()) == 1) continue;
 
             System.out.println("\nRescheduling " + e + "...");
 
