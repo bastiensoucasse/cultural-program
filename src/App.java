@@ -128,7 +128,6 @@ public class App {
         List<Event> eventList = defaultEvents(9); // Test
 
         List<Event> newEvents = new ArrayList<>();
-        List<Event> droppedEvents = new ArrayList<>();
 
         // Try to add each event
         while (!eventList.isEmpty()) {
@@ -143,10 +142,7 @@ public class App {
                         else event.setCapacity(capacity);
                     }
                 }
-                if (!canBeHosted) {
-                    droppedEvents.add(event);
-                    continue;
-                }
+                if (!canBeHosted) continue;
 
                 // Split the event into one for each week it is in if necessary
                 final Map<Integer, List<LocalDate>> datesPerWeek = new HashMap<>();
@@ -193,9 +189,6 @@ public class App {
                 MEMORY_REPO.saveProgram(program);
                 // FILE_REPO.saveProgram(program);
             }
-
-            if (!droppedEvents.isEmpty()) newEvents.addAll(EventUI.giveUpOnEvents(droppedEvents));
-            droppedEvents.clear();
 
             eventList.clear();
             eventList.addAll(newEvents);
