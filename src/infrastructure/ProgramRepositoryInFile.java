@@ -53,14 +53,40 @@ public class ProgramRepositoryInFile implements ProgramRepository {
 
 
 // We also tried to use Gson, but we've met some difficulties to serialize a sub-object dealing with polymorphism…
-/*
-public class ProgramRepositoryInFile implements ProgramRepository {
+
+/*public class ProgramRepositoryInFile implements ProgramRepository {
     // @Override
     public void saveProgram(final Program program) {
+        Gson gson = new Gson();
+        Writer w = null;
+        try {
+            w = new FileWriter("Week" + program.getId() + ".json");
+            gson.toJson(program, w);
+            // w.flush()
+            // w.close()
+
+        } catch (JsonIOException | IOException e) {
+            e.printStackTrace();
+
+ 
+        }
     }
 
     // @Override
     public Program findProgramById(final int programId) {
+        Gson gson = new Gson();
+        Reader r = null;
+        Program program = null;
+        try {
+            r = new FileReader("Week" + programId + ".json");
+            program = gson.fromJson(r, Program.class);
+            r.close();
+
+        } catch (JsonSyntaxException | JsonIOException | IOException e) {
+            e.printStackTrace();
+        } 
+
+        return program;
     }
 }
 */

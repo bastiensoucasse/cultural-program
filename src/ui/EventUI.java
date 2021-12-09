@@ -8,7 +8,9 @@ import domain.TimeSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Event UI.
@@ -140,5 +142,33 @@ public class EventUI extends AbstractUI {
         }
 
         return newList;
+    }
+
+  
+    /**
+     * Ask user if they want to reschedule events that could not find a venue still (probably because the week is full)
+     * or delete the event (giving up on trying and scheduling it)
+     * 
+     * @param eventList
+     * @return Map that associates the decision to delete or not, to an event
+     *         True means the event is cancelled
+     *         False otherwise
+     */
+
+    public static Map<Event, Boolean> giveUpOnEvents(List<Event> eventList) {
+        System.out.println("\n*** LAST CHANCE ON EVENTS ***");
+        System.out.println("Do you want to try and reschedule, or cancel the following event(s) ? ('y' or 'n')");
+        Map<Event, Boolean> updateEventMap = new HashMap<>();
+
+        char c;
+        boolean decision;
+        for (Event e : eventList) {
+            System.out.println(e + ": ");
+            c = retrieveInfo().charAt(0);
+            decision = c == 'y' ? true : false;
+            updateEventMap.put(e, decision);
+        }
+
+        return updateEventMap;
     }
 }
