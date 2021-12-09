@@ -114,7 +114,7 @@ public abstract class Event {
         for (final LocalDate d : dates) {
             if (first) first = false;
             else s.append(", ");
-            s.append(d.format(DateTimeFormatter.ofPattern("EEEE M/d/yyyy")));
+            s.append(d.format(DateTimeFormatter.ofPattern("EEEE, MMMM d")));
         }
         return s.toString();
     }

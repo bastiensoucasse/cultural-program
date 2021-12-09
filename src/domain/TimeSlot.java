@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  * @author Iantsa Provost
  */
 public class TimeSlot {
-    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:m a");
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
 
     private final LocalTime startTime;
     private final LocalTime endTime;

@@ -1,6 +1,7 @@
 package domain;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +112,6 @@ public class Program {
                 continue;
 
             if (!venueIsEmpty(venue)) return venue;
-
             if (canUseNewVenue()) return venue;
         }
 
@@ -251,7 +251,8 @@ public class Program {
      * @return <code>true</code> if the venue can host the event after modification; <code>false</code> otherwise.
      */
     private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
-        // If the venue can't host for such capacity or is closed, NO
+        // If the venue is the empty one, can't host for such capacity, or is closed, NO
+        if (venueIsEmpty(venue)) return false; // If we are here, and we find the empty one, it means it's the reserved one.
         if (!venue.canHost(event.getCapacity())) return false;
         for (final LocalDate d : event.getDates()) if (!venue.isOpened(d.getDayOfWeek(), event.getSlot())) return false;
 
@@ -371,15 +372,16 @@ public class Program {
         for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet()) {
             final Event event = entry.getKey();
             final Map<LocalDate, Venue> dateVenueMap = entry.getValue();
-            s.append("\n - ").append(event).append(", at respectively ");
+            s.append("\n - ").append(event).append(" (");
             boolean first = true;
             for (final Entry<LocalDate, Venue> entry1 : dateVenueMap.entrySet()) {
                 if (first) first = false;
                 else s.append(", ");
+                final LocalDate date = entry1.getKey();
                 final Venue venue = entry1.getValue();
-                s.append(venue);
+                s.append(date.format(DateTimeFormatter.ofPattern("EEEE, MMMM d"))).append(" at ").append(venue);
             }
-            s.append(".");
+            s.append(").");
         }
         return s.toString();
     }

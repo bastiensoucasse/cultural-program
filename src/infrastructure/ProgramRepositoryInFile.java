@@ -16,6 +16,7 @@ import java.io.*;
  * @author Iantsa Provost
  */
 public class ProgramRepositoryInFile implements ProgramRepository {
+    private static final String PATH = "saves/";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
@@ -28,7 +29,7 @@ public class ProgramRepositoryInFile implements ProgramRepository {
         Writer w;
 
         try {
-            w = new FileWriter("Week" + program.getId() + ".json");
+            w = new FileWriter(PATH + "Week" + program.getId() + ".json");
             MAPPER.writerWithDefaultPrettyPrinter().writeValue(w, program);
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +42,7 @@ public class ProgramRepositoryInFile implements ProgramRepository {
         Reader r;
 
         try {
-            r = new FileReader("Week" + programId + ".json");
+            r = new FileReader(PATH + "Week" + programId + ".json");
             program = MAPPER.readValue(r, Program.class);
         } catch (IOException e) {
             e.printStackTrace();
