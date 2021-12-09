@@ -330,10 +330,8 @@ public class Program {
 
         // No free venues for all dates could be found
         venues.clear();
-        for (final LocalDate date : event.getDates()) {
-            final Venue venue = findVenueByModifying(event);
-            if (venue != null) venues.put(date, venue);
-        }
+        final Venue venue = findVenueByModifying(event);
+        if (venue != null) for (final LocalDate date : event.getDates()) venues.put(date, venue);
         return venues;
     }
 
