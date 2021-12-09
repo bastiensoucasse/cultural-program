@@ -19,6 +19,7 @@ import java.util.Map;
 public class VenueUI extends AbstractUI {
     /**
      * Ask user for information to initialize a venue.
+     * User should enter valid input, according to what is asked.
      *
      * @return Venue created
      */
@@ -49,11 +50,12 @@ public class VenueUI extends AbstractUI {
     /**
      * Ask user to initialize each of the 4 venues of JolieCité, if they want to.
      * Will use default setting otherwise.
+     * User should enter valid input, according to what is asked.
      *
      * @return List of the 4 initialized venues
      */
     public static List<Venue> retrieveAllVenues() {
-        System.out.println("*** VENUE INITIALIZER *** ");
+        System.out.println("\n*** VENUE INITIALIZER *** ");
         System.out.println("Reminder: There are 4 venues in JolieCité.");
 
         System.out.println("How do you want to initialize the venues ?");

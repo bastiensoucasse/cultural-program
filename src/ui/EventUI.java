@@ -94,7 +94,7 @@ public class EventUI extends AbstractUI {
     }
 
     /**
-     * Asks the user to reschedule events that had to be removed.
+     * Asks the user to reschedule or cancel events that had to be removed.
      * User should enter valid input, according to what is asked.
      *
      * @param eventList This list of event to reschedule.
@@ -105,6 +105,14 @@ public class EventUI extends AbstractUI {
         List<Event> newList = new ArrayList<>();
 
         for (Event e : eventList) {
+            System.out.println(e);
+            System.out.println("Do you want to reschedule or cancel this event ?");
+            System.out.println("0. Reschedule");
+            System.out.println("1. Cancel");
+            System.out.print("Enter an option: ");
+
+            if (Integer.parseInt(retrieveInfo()) == 1) continue ;
+
             System.out.println("\nRescheduling " + e + "...");
 
             if (e.getClass() == Concert.class) System.out.print("Enter date (MM-dd): ");
@@ -136,28 +144,6 @@ public class EventUI extends AbstractUI {
         return newList;
     }
 
-    /**
-     * Asks the user if they want to reschedule events that could be hosted in a venue
-     * (probably because the week is full) or delete the event (giving up on trying and scheduling it).
-     *
-     * @param eventList The list of events to handle.
-     * @return The map that associates the decision to delete or not, to an event.
-     * The decision is a boolean set to <code>true</code> if the event is cancelled; <code>false</code> otherwise.
-     */
-    public static List<Event> giveUpOnEvents(final List<Event> eventList) {
-        System.out.println("\n*** LAST CHANCE ON EVENTS ***");
-        System.out.println("Do you want to try and reschedule, or cancel the following event(s) ? ('y' or 'n')");
-        List<Event> keptEvents = new ArrayList<>();
-
-        char c;
-        for (Event e : eventList) {
-            System.out.print(e + ": ");
-            c = retrieveInfo().charAt(0);
-            if (c == 'y') keptEvents.add(e);
-        }
-
-        return keptEvents;
-    }
 
     /**
      * Asks the user to choose a new capacity for a given event or cancel it.

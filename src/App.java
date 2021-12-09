@@ -124,8 +124,8 @@ public class App {
         AppUI.launch();
         List<Venue> venueList = VenueUI.retrieveAllVenues();
         if (venueList.isEmpty()) venueList = defaultVenues();
-        // List<Event> eventList = EventUI.retrieveAllEvents();
-        List<Event> eventList = defaultEvents(9); // Test
+        List<Event> eventList = EventUI.retrieveAllEvents();
+        // List<Event> eventList = defaultEvents(9); // Test
 
         List<Event> newEvents = new ArrayList<>();
 
