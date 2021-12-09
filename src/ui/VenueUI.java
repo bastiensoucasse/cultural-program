@@ -1,5 +1,8 @@
 package ui;
 
+import domain.TimeSlot;
+import domain.Venue;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -7,21 +10,17 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import domain.TimeSlot;
-import domain.Venue;
-
 /**
- * Venue UI
- * 
+ * Venue UI.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
 
 public class VenueUI extends AbstractUI {
-
     /**
      * Ask user for information to initialize a venue.
-     * 
+     *
      * @return Venue created
      */
     public static Venue retrieveVenue() {
@@ -43,7 +42,7 @@ public class VenueUI extends AbstractUI {
         }
 
         final Venue venue = new Venue(capacity, openingHours);
-        
+
         System.out.println(venue + " successfully added!");
         return venue;
     }
@@ -51,7 +50,7 @@ public class VenueUI extends AbstractUI {
     /**
      * Ask user to initialize each of the 4 venues of JolieCité, if they want to.
      * Will use default setting otherwise.
-     * 
+     *
      * @return List of the 4 initialized venues
      */
     public static List<Venue> retrieveAllVenues() {

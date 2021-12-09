@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ???
- * 
+ * Program repository storing programs in memory.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */

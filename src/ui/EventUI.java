@@ -1,18 +1,18 @@
 package ui;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import domain.Concert;
 import domain.Event;
 import domain.Play;
 import domain.TimeSlot;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Event UI
- * 
+ * Event UI.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
@@ -23,7 +23,7 @@ public class EventUI extends AbstractUI {
     /**
      * Ask user for information needed to create an event.
      * User should enter valid input, according to what is asked.
-     * 
+     *
      * @return created Event
      */
     public static Event retrieveEvent() {
@@ -35,18 +35,16 @@ public class EventUI extends AbstractUI {
         System.out.print("Enter an option: ");
         int eventType = Integer.parseInt(retrieveInfo());
 
-        
+
         if (eventType == 0) // should not be -1
             System.out.print("Enter artist/group name: ");
-        else
-            System.out.print("Enter title: ");
+        else System.out.print("Enter title: ");
         String artist_title = retrieveInfo();
 
 
         if (eventType == 0) // should not be -1
             System.out.print("Enter date (MM-dd): ");
-        else 
-            System.out.print("Enter first date of representation (MM-dd): ");
+        else System.out.print("Enter first date of representation (MM-dd): ");
 
         LocalDate date = LocalDate.parse(year + "-" + retrieveInfo());
 
@@ -55,8 +53,8 @@ public class EventUI extends AbstractUI {
             System.out.print("Enter last date of representation (MM-dd): ");
             endDate = LocalDate.parse(year + "-" + retrieveInfo());
         }
-        
-        
+
+
         System.out.print("Enter start time (HH[:mm]): ");
         LocalTime startTime = LocalTime.parse(retrieveInfo(), tf);
 
@@ -65,15 +63,13 @@ public class EventUI extends AbstractUI {
 
         TimeSlot slot = new TimeSlot(startTime, endTime);
 
-        
+
         System.out.print("Enter the audience capacity expected: ");
         int capacity = Integer.parseInt(retrieveInfo());
 
         Event event;
-        if (eventType == 0)
-            event = new Concert(artist_title, date, slot, capacity);
-        else 
-            event = new Play(artist_title, date, endDate, slot, capacity);
+        if (eventType == 0) event = new Concert(artist_title, date, slot, capacity);
+        else event = new Play(artist_title, date, endDate, slot, capacity);
 
 
         System.out.println(event + " successfully added!");
@@ -83,7 +79,7 @@ public class EventUI extends AbstractUI {
     /**
      * Allow user to create as many events as they want/need.
      * User should enter valid input, according to what is asked.
-     * 
+     *
      * @return List of created Event
      */
     public static List<Event> retrieveAllEvents() {
@@ -99,27 +95,25 @@ public class EventUI extends AbstractUI {
             System.out.print("Do you want to add another event ? ('y' or 'n'): ");
             c = retrieveInfo();
         }
-        
+
         return eventList;
     }
 
     /**
      * Ask user to reschedule events that had to be removed.
      * User should enter valid input, according to what is asked.
-     * 
+     *
      * @return List of rescheduled events
      */
     public static List<Event> reloadEvents(List<Event> eventList) {
         System.out.println("\n*** RESCHEDULE EVENTS ***");
         List<Event> newList = new ArrayList<>();
-        
+
         for (Event e : eventList) {
             System.out.println("\nRescheduling " + e + "...");
 
-            if (e.getClass() == Concert.class)
-                System.out.print("Enter date (MM-dd): ");
-            else 
-                System.out.print("Enter first date of representation (MM-dd): ");
+            if (e.getClass() == Concert.class) System.out.print("Enter date (MM-dd): ");
+            else System.out.print("Enter first date of representation (MM-dd): ");
 
             LocalDate date = LocalDate.parse(year + "-" + retrieveInfo());
 
@@ -128,8 +122,8 @@ public class EventUI extends AbstractUI {
                 System.out.print("Enter last date of representation (MM-dd): ");
                 endDate = LocalDate.parse(year + "-" + retrieveInfo());
             }
-            
-            
+
+
             System.out.print("Enter start time (HH[:mm]): ");
             LocalTime startTime = LocalTime.parse(retrieveInfo(), tf);
 
@@ -141,8 +135,7 @@ public class EventUI extends AbstractUI {
             Event event;
             if (e.getClass() == Concert.class)
                 event = new Concert(((Concert) e).getArtist(), date, slot, e.getCapacity());
-            else
-                event = new Play(((Play) e).getTitle(), date, endDate, slot, e.getCapacity());
+            else event = new Play(((Play) e).getTitle(), date, endDate, slot, e.getCapacity());
             newList.add(event);
         }
 

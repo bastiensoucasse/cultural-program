@@ -1,33 +1,30 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import java.time.format.DateTimeFormatter;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
 
 /**
- * ???
+ * Event (can't be instantiated) representing either a Concert or a Play.
  * (Entity)
- * 
+ *
  * @author Bastien Soucasse
- * @author Iantsa Provost 
+ * @author Iantsa Provost
  */
-
 @JsonTypeInfo(use = NAME, include = PROPERTY)
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = Concert.class, name = "Concert"),
-        @JsonSubTypes.Type(value = Play.class, name = "Play")
-})
+@JsonSubTypes({@JsonSubTypes.Type(value = Concert.class, name = "Concert"), @JsonSubTypes.Type(value = Play.class, name = "Play")})
 public abstract class Event {
-    private static int numEvents = 0;
+    private static transient int numEvents = 0;
 
     private final int id;
     private final List<LocalDate> dates = new ArrayList<>();
@@ -40,16 +37,20 @@ public abstract class Event {
         this.capacity = capacity;
     }
 
-    protected void addDate(final LocalDate date) {
-        dates.add(date);
-    }
-
     public int getId() {
         return id;
     }
 
     public List<LocalDate> getDates() {
         return dates;
+    }
+
+    public void addDate(final LocalDate date) {
+        dates.add(date);
+    }
+
+    public void removeDate(final LocalDate date) {
+        dates.remove(date);
     }
 
     public TimeSlot getTimeSlot() {
@@ -61,104 +62,27 @@ public abstract class Event {
     }
 
     /**
-     * Checks if the event has no date on SATURDAY and SUNDAY.
-     */
-    public boolean isNotWE() {
-        for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                return false;
-
-        return true;
-    }
-
-    /**
      * Checks if the event has a date on SATURDAY.
      */
-    public boolean isWESat() {
+    public boolean isOnSaturday() {
         for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
-                return true;
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY) return true;
         return false;
     }
 
     /**
      * Checks if the event has a date on SUNDAY.
      */
-    public boolean isWESun() {
+    public boolean isOnSunday() {
         for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                return true;
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY) return true;
         return false;
-    }
-
-    /**
-     * Checks if the event has a date on SATURDAY or SUNDAY (but not both).
-     */
-    public boolean isPartlyWE() {
-        boolean sat = false, sun = false;
-
-        for (final LocalDate date : dates) {
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
-                sat = true;
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                sun = true;
-        }
-
-        if (sat && sun) return false;
-        return sat || sun;
-    }
-
-    /**
-     * Checks if the event has a date on both SATURDAY and SUNDAY.
-     */
-    public boolean isFullyWE() {
-        boolean sat = false, sun = false;
-
-        for (final LocalDate date : dates) {
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
-                sat = true;
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                sun = true;
-        }
-
-        return sat && sun;
-    }
-
-    /**
-     * Checks if the event has a date on only SATURDAY or SUNDAY.
-     */
-    public boolean isOnlyWE() {
-        for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.MONDAY || date.getDayOfWeek() == DayOfWeek.TUESDAY || date.getDayOfWeek() == DayOfWeek.WEDNESDAY || date.getDayOfWeek() == DayOfWeek.THURSDAY || date.getDayOfWeek() == DayOfWeek.FRIDAY)
-                return false;
-
-        return true;
-    }
-
-    /**
-     * Checks if the event has a date on both SATURDAY and SUNDAY and only them.
-     */
-    public boolean isFullAndOnlyWE() {
-        boolean sat = false, sun = false;
-
-        for (final LocalDate date : dates) {
-            if (date.getDayOfWeek() == DayOfWeek.MONDAY || date.getDayOfWeek() == DayOfWeek.TUESDAY || date.getDayOfWeek() == DayOfWeek.WEDNESDAY || date.getDayOfWeek() == DayOfWeek.THURSDAY || date.getDayOfWeek() == DayOfWeek.FRIDAY)
-                return false;
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
-                sat = true;
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                sun = true;
-        }
-
-        return sat && sun;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
         return id == event.id;
     }
@@ -169,18 +93,24 @@ public abstract class Event {
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
     public String toString() {
-        String s = "from " + slot + "(" + capacity + " attenders), on ";
+        StringBuilder s = new StringBuilder("(" + capacity + " attenders), " + slot + ", on ");
         boolean first = true;
         for (final LocalDate d : dates) {
             if (first) first = false;
-            else s += ", ";
-            s += d.getDayOfWeek().name().toLowerCase();
+            else s.append(", ");
+            s.append(d.format(DateTimeFormatter.ofPattern("EEEE M/d/yyyy")));
         }
-        return s + ".";
+        s.append(".");
+        return s.toString();
     }
 
     public String toStringWithoutDates() {
-        return "from " + slot + "(" + capacity + " attenders)";
+        return "(" + capacity + " attenders), " + slot;
     }
 }

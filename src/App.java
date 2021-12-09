@@ -1,25 +1,18 @@
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-
-import domain.Event;
-import domain.Program;
-import domain.ProgramRepository;
-import domain.TimeSlot;
-import domain.Venue;
+import domain.*;
 import infrastructure.ProgramRepositoryInFile;
 import infrastructure.ProgramRepositoryInMemory;
 import ui.AppUI;
 import ui.EventUI;
 import ui.VenueUI;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
+
 /**
- * ???
- * 
+ * Client of the application.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
@@ -28,6 +21,7 @@ public class App {
     private static final ProgramRepository FILE_REPO = new ProgramRepositoryInFile();
 
     private static final List<Integer> weekList = new ArrayList<>();
+
     private static List<Venue> defaultVenues() {
         final List<Venue> venues = new ArrayList<>();
 
@@ -63,7 +57,8 @@ public class App {
                 for (final int week : eventWeekList) {
                     final Program program = weekList.contains(week) ? MEMORY_REPO.findProgramById(week) : new Program(week, venueList);
                     if (!weekList.contains(week)) weekList.add(week);
-                    
+
+                    // event.getDates().removeIf(d -> (d.getDayOfYear() / 7) != week);
                     if (!program.add(event)) newEventList.addAll(EventUI.reloadEvents(new ArrayList<>(List.of(event))));
 
                     final List<Event> removedEventList = program.getRemovedEvents();

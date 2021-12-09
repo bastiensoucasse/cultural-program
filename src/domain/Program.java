@@ -1,7 +1,7 @@
 package domain;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,21 +9,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Program for a week
+ * Program for a week.
  * (Aggregate)
- * 
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
 public class Program {
-    private final int id; // Week number
+    private final int id;
     private final String name;
     private final List<Venue> venueList;
     private final Map<Event, Map<LocalDate, Venue>> eventMap = new HashMap<>();
 
-    private final List<Event> removedEvents = new ArrayList<>();
-    private final Map<Venue, Integer> numConcerts;
-    private final Map<Venue, Integer> numPlays;
+    private transient List<Event> removedEvents = new ArrayList<>();
+    private final transient Map<Venue, Integer> numConcerts;
+    private final transient Map<Venue, Integer> numPlays;
 
     public Program(final int id, final List<Venue> venueList) {
         this.id = id;
@@ -39,18 +39,39 @@ public class Program {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Venue> getVenueList() {
+        return venueList;
+    }
+
+    public Map<Event, Map<LocalDate, Venue>> getEventMap() {
+        return eventMap;
+    }
+
+    public List<Event> getRemovedEvents() {
+        return removedEvents;
+    }
+
     /**
      * Checks if a venue is available at a given date.
-     * 
-     * @param venue…
-     * @param date…
-     * @return…
+     *
+     * @param venue …
+     * @param date  …
+     * @return …
      */
     private boolean venueIsAvailable(final Venue venue, final LocalDate date) {
         // If (at least) one event has (at least) one date at venue, it's not available
-        for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet())
-            if (((Map<LocalDate, Venue>) entry.getValue()).containsValue(venue))
-                return false;
+        for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet()) {
+            final Map<LocalDate, Venue> venues = entry.getValue();
+            if (venues.containsKey(date) && venues.get(date).equals(venue)) return false;
+        }
 
         return true;
     }
@@ -58,8 +79,8 @@ public class Program {
     /**
      * Checks if the venue is empty.
      *
-     * @param venue…
-     * @return…
+     * @param venue …
+     * @return …
      */
     private boolean venueIsEmpty(final Venue venue) {
         // If there are no concerts not plays, it's empty
@@ -68,39 +89,35 @@ public class Program {
 
     /**
      * Checks if it's possible to use a new (empty) venue.
-     * 
+     *
      * @return true if there will be at least one venue available after; false otherwise.
      */
     private boolean canUseNewVenue() {
         int emptyVenues = 0;
 
         for (final Venue venue : venueList)
-            if (numConcerts.get(venue) == 0 && numPlays.get(venue) == 0)
-                emptyVenues++;
+            if (numConcerts.get(venue) == 0 && numPlays.get(venue) == 0) emptyVenues++;
 
         return emptyVenues > 1;
     }
 
     /**
      * Finds a free venue at a given date and time slot.
-     * 
-     * @param date…
-     * @param slot…
-     * @return…
+     *
+     * @param date …
+     * @param slot …
+     * @return …
      */
     private Venue findFreeVenue(final LocalDate date, final TimeSlot slot) {
         for (final Venue venue : venueList) {
             // If the venue is closed or not available, check the next one
-            if (!venue.isOpened(date.getDayOfWeek(), slot) || !venueIsAvailable(venue, date))
-                continue;
+            if (!venue.isOpened(date.getDayOfWeek(), slot) || !venueIsAvailable(venue, date)) continue;
 
             // If the venue is not empty, we can use this one
-            if (!venueIsEmpty(venue))
-                return venue;
-            
+            if (!venueIsEmpty(venue)) return venue;
+
             // The venue is empty, if it's possible to use a new one, use this one
-            if (canUseNewVenue())
-                return venue;
+            if (canUseNewVenue()) return venue;
         }
 
         return null;
@@ -108,9 +125,9 @@ public class Program {
 
     /**
      * Finds a free venue for each date of an event.
-     * 
-     * @param event…
-     * @return…
+     *
+     * @param event …
+     * @return …
      */
     private Map<LocalDate, Venue> findFreeVenues(final Event event) {
         final Map<LocalDate, Venue> venues = new HashMap<>();
@@ -126,10 +143,10 @@ public class Program {
 
     /**
      * Gets the list of events that overlap with a given event, at a given venue.
-     * 
-     * @param event…
-     * @param venue…
-     * @return…
+     *
+     * @param event …
+     * @param venue …
+     * @return …
      */
     private List<Event> getOverlapEvents(final Event event, final Venue venue) {
         final List<Event> overlapEvents = new ArrayList<>();
@@ -137,9 +154,8 @@ public class Program {
         // Adds the event if it shares (at least) one date at the same venue.
         for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet())
             for (final LocalDate date : event.getDates()) {
-                final Map<LocalDate, Venue> venues = (Map<LocalDate, Venue>) entry.getValue();
-                if (venues.containsKey(date) && venues.get(date).equals(venue))
-                    overlapEvents.add((Event) entry.getKey());
+                final Map<LocalDate, Venue> venues = entry.getValue();
+                if (venues.containsKey(date) && venues.get(date).equals(venue)) overlapEvents.add(entry.getKey());
             }
 
         return overlapEvents;
@@ -147,52 +163,46 @@ public class Program {
 
     /**
      * Checks if an event list contains an instance of a class.
-     * 
-     * @param events…
-     * @param class…
-     * @return…
+     *
+     * @param events …
+     * @param clazz  …
+     * @return …
      */
     private boolean eventsContainsInstanceOf(final List<Event> events, Class<?> clazz) {
         // If there is at least one of such class, it's true
         for (final Event e : events)
-            if (e.getClass() == clazz)
-                return true;
+            if (e.getClass() == clazz) return true;
 
         return false;
     }
 
     /**
      * Checks if a venue can host a complete event if it modifies some of its own events.
-     * 
-     * @param venue…
-     * @param event…
-     * @param overlapEvents…
-     * @return…
+     *
+     * @param venue …
+     * @param event …
+     * @return …
      */
     private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
         final List<Event> overlapEvents = getOverlapEvents(event, venue);
-    
+
         // We want to add a concert
         if (event instanceof Concert) {
             final Event e = overlapEvents.get(0);
 
             // If concert, NO
-            if (e instanceof Concert)
-                return false;
-            
+            if (e instanceof Concert) return false;
+
             // If play
             if (e instanceof Play) {
                 // If both SATURDAY and SUNDAY, NO
-                if (e.isFullyWE())
-                    return false;
+                if (e.isOnSaturday() && e.isOnSunday()) return false;
 
                 // Not SATURDAY nor SUNDAY or only one
                 // If first concert, YES
-                if (numConcerts.get(venue) == 0)
-                    return true;
+                return numConcerts.get(venue) == 0;
 
                 // Otherwise, NO
-                return false;
             }
         }
 
@@ -201,56 +211,44 @@ public class Program {
             int sum = 0, concerts = 0;
             boolean sat = false, sun = false;
             for (final Event e : overlapEvents) {
-                if (e instanceof Concert)
-                    concerts++;
-                if (e instanceof Play)
-                    sum += e.getDates().size();
-                if (e.isWESat())
-                    sat = true;
-                if (e.isWESun())
-                    sun = true;
+                if (e instanceof Concert) concerts++;
+                if (e instanceof Play) sum += e.getDates().size();
+                if (e.isOnSaturday()) sat = true;
+                if (e.isOnSunday()) sun = true;
             }
 
             // If both sat and sun
-            if (event.isWESat() && event.isWESun()) {
+            if (event.isOnSaturday() && event.isOnSunday()) {
                 // If only play(s)
                 if (eventsContainsInstanceOf(overlapEvents, Play.class) && !eventsContainsInstanceOf(overlapEvents, Concert.class)) {
                     // If no SATURDAY or no SUNDAY, YES
-                    if (!sat || !sun)
-                        return true;
-                    
+                    if (!sat || !sun) return true;
+
                     // If longer then sum, YES
-                    if (event.getDates().size() > sum)
-                        return true;
-                    
+                    return event.getDates().size() > sum;
+
                     // Otherwise, NO
-                    return false;
                 }
 
                 // If both concert(s) and play(s) or only concert(s)
                 if (eventsContainsInstanceOf(overlapEvents, Concert.class)) {
                     // If both SATURDAY and SUNDAY, NO
-                    if (sat && sun && concerts == numConcerts.get(venue))
-                        return false;
+                    return !sat || !sun || concerts != numConcerts.get(venue);
 
                     // Otherwise, YES
-                    return true;
                 }
             }
 
             // Not sat nor sun or only one
             // If both concert(s) and play(s) or only concert(s), NO
-            if (eventsContainsInstanceOf(overlapEvents, Concert.class))
-                return false;
+            if (eventsContainsInstanceOf(overlapEvents, Concert.class)) return false;
 
             // If only play(s)
             if (eventsContainsInstanceOf(overlapEvents, Play.class)) {
                 // If longer, YES
-                if (event.getDates().size() > sum)
-                    return true;
-                
+                return event.getDates().size() > sum;
+
                 // Otherwise, NO
-                return false;
             }
         }
 
@@ -259,34 +257,37 @@ public class Program {
 
     /**
      * Finds a venue for an event by modifying other events schedule.
-     * 
-     * @param event…
-     * @return…
+     *
+     * @param event …
+     * @return …
      */
     private Venue findVenueByModifying(final Event event) {
         for (final Venue venue : venueList)
-            if (canVenueHostEventIfModify(venue, event))
+            if (canVenueHostEventIfModify(venue, event)) {
+                removedEvents = new ArrayList<>(getOverlapEvents(event, venue));
                 return venue;
+            }
 
         return null;
     }
 
     /**
      * Finds a venue for each event date.
-     * 
-     * @param event…
-     * @return…
+     *
+     * @param event …
+     * @return …
      */
     private Map<LocalDate, Venue> findVenues(final Event event) {
         // Try to get free venues
         Map<LocalDate, Venue> venues = findFreeVenues(event);
-        if (venues.size() == event.getDates().size())
-            return venues;
-        
+        if (venues.size() == event.getDates().size()) return venues;
+
         // No free venues for all dates could be found
         venues.clear();
-        for (final LocalDate date : event.getDates())
-            venues.put(date, findVenueByModifying(event));
+        for (final LocalDate date : event.getDates()) {
+            final Venue venue = findVenueByModifying(event);
+            if (venue != null) venues.put(date, venue);
+        }
         return venues;
     }
 
@@ -389,37 +390,8 @@ public class Program {
     // return dateVenue;
     // }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Venue> getVenueList() {
-        return venueList;
-    }
-
-    public Map<Event, Map<LocalDate, Venue>> getEventMap() {
-        return eventMap;
-    }
-
-    public List<Event> getRemovedEvents() {
-        return removedEvents;
-    }
-
-    public Map<Venue, Integer> getNumConcerts() {
-        return numConcerts;
-    }
-
-    public Map<Venue, Integer> getNumPlays() {
-        return numPlays;
-    }
-
     public void clearRemovedEvents() {
-        if (removedEvents.size() == 0)
-            return;
+        if (removedEvents.size() == 0) return;
         for (Event e : removedEvents)
             eventMap.remove(e);
         removedEvents.clear();
@@ -427,14 +399,11 @@ public class Program {
 
     public boolean add(final Event event) {
         final Map<LocalDate, Venue> venues = findVenues(event);
-        if (venues.isEmpty())
-            return false;
+        if (venues.isEmpty()) return false;
 
         for (Map.Entry<LocalDate, Venue> entry : venues.entrySet()) {
-            if (event.getClass() == Play.class)
-                numPlays.replace(entry.getValue(), numPlays.get(entry.getValue()) + 1);
-            else
-                numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
+            if (event.getClass() == Play.class) numPlays.replace(entry.getValue(), numPlays.get(entry.getValue()) + 1);
+            else numConcerts.replace(entry.getValue(), numConcerts.get(entry.getValue()) + 1);
         }
 
         eventMap.put(event, venues);
@@ -444,19 +413,21 @@ public class Program {
 
     @Override
     public String toString() {
-        String s = "\n" + name + ": ";
-        for (Event e : eventMap.keySet()) {
-            s += "\n - " + e.toStringWithoutDates() + " on ";
+        StringBuilder s = new StringBuilder("\n" + name + ": ");
+        for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet()) {
+            final Event event = entry.getKey();
+            final Map<LocalDate, Venue> dateVenueMap = entry.getValue();
+            s.append("\n - ").append(event.toStringWithoutDates()).append(" on ");
             boolean first = true;
-            for (LocalDate d : e.getDates()) {
-                if (first)
-                    first = false;
-                else
-                    s += ", ";
-                s += d.getDayOfWeek().name().toLowerCase() + " at " + eventMap.get(e).get(d);
+            for (final Entry<LocalDate, Venue> entry1 : dateVenueMap.entrySet()) {
+                if (first) first = false;
+                else s.append(", ");
+                final LocalDate date = entry1.getKey();
+                final Venue venue = entry1.getValue();
+                s.append(date.format(DateTimeFormatter.ofPattern("EEEE MM/dd/yyyy"))).append(" at ").append(venue);
             }
-            s += ".";
+            s.append(".");
         }
-        return s;
+        return s.toString();
     }
 }

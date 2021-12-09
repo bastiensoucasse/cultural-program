@@ -6,14 +6,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * ???
+ * Venue (place for an event).
  * (Entity)
- * 
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
 public class Venue {
-    private static int numVenues = 0;
+    private static transient int numVenues = 0;
 
     private final int id;
     private final String name;
@@ -50,10 +50,8 @@ public class Venue {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         final Venue venue = (Venue) o;
         return id == venue.id;
     }

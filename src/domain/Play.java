@@ -3,8 +3,8 @@ package domain;
 import java.time.LocalDate;
 
 /**
- * ???
- * 
+ * Play (cultural event) during several days.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
@@ -29,4 +29,7 @@ public class Play extends Event {
     public String toString() {
         return "Play " + title + ", " + super.toString();
     }
+
+    @Override
+    public String toStringWithoutDates() { return "Play " + title + ", " + super.toStringWithoutDates(); }
 }

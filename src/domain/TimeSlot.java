@@ -1,15 +1,18 @@
 package domain;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
- * Time slot object used to represent opening hours and events duration
+ * Time slot object used to represent opening hours and event durations.
  * (Value Object)
- * 
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
 public class TimeSlot {
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:m a");
+
     private final LocalTime startTime;
     private final LocalTime endTime;
 
@@ -27,19 +30,17 @@ public class TimeSlot {
     }
 
     /**
-     * Find out if the time slot overlaps with other
-     * 
-     * @param other Time slot compared with
-     * @return True if the time slots overlap
-     *         False otherwise.
+     * Checks if the time slot overlaps with another one.
+     *
+     * @param other The time slot to compare it to.
+     * @return <code>true</code> if the time slots overlap; <code>false</code> otherwise.
      */
     public boolean overlap(final TimeSlot other) {
-        return !other.getStartTime().isBefore(startTime) && !other.getStartTime().isAfter(endTime)
-                || !other.getEndTime().isAfter(endTime) && !other.getEndTime().isBefore(startTime);
+        return !other.getStartTime().isBefore(startTime) && !other.getStartTime().isAfter(endTime) || !other.getEndTime().isAfter(endTime) && !other.getEndTime().isBefore(startTime);
     }
 
     @Override
     public String toString() {
-        return startTime + " to " + endTime;
+        return "from " + startTime.format(timeFormatter) + " to " + endTime.format(timeFormatter);
     }
 }

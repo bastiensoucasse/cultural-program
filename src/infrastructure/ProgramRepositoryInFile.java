@@ -1,22 +1,17 @@
 package infrastructure;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
-
 import domain.Concert;
 import domain.Play;
 import domain.Program;
 import domain.ProgramRepository;
 
+import java.io.*;
+
 /**
- * ???
- * 
+ * Program repository storing programs in different files.
+ *
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
@@ -28,23 +23,22 @@ public class ProgramRepositoryInFile implements ProgramRepository {
         MAPPER.registerSubtypes(new NamedType(Play.class, "Play"));
     }
 
+    // @Override
     public void saveProgram(final Program program) {
-        Writer w = null;
+        Writer w;
 
         try {
             w = new FileWriter("Week" + program.getId() + ".json");
-            // json = MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(program);
             MAPPER.writerWithDefaultPrettyPrinter().writeValue(w, program);
-            // w.flush();
-            // w.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // @Override
     public Program findProgramById(final int programId) {
         Program program = null;
-        Reader r = null;
+        Reader r;
 
         try {
             r = new FileReader("Week" + programId + ".json");
@@ -52,7 +46,21 @@ public class ProgramRepositoryInFile implements ProgramRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         return program;
     }
 }
+
+
+// We also tried to use Gson, but we've met some difficulties to serialize a sub-object dealing with polymorphism…
+/*
+public class ProgramRepositoryInFile implements ProgramRepository {
+    // @Override
+    public void saveProgram(final Program program) {
+    }
+
+    // @Override
+    public Program findProgramById(final int programId) {
+    }
+}
+*/
