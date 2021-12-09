@@ -1,0 +1,113 @@
+*** WELCOME TO BISH (stands for Bastien & Iantsa's Scheduling Helper) ***
+
+*** VENUE INITIALIZER ***
+Reminder: There are 4 venues in JolieCité.
+How do you want to initialize the venues ?
+0. Default settings
+1. Choose myself
+Enter an option: 0
+
+*** EVENT ADDER ***
+
+What year do you want to schedule ? 2022
+
+*** Schedule an event ***
+What type of event do you want to schedule ?
+0. Concert
+1. Play
+Enter an option: 0
+Enter artist/group name: Osabat
+Enter date (MM-dd): 02-28
+Enter start time (HH[:mm]): 21
+Enter end time (HH[:mm]): 23
+Enter the audience capacity expected: 5000
+Concert of Osabat, (5000 attenders), from 9:00 PM to 11:00 PM, on Monday, February 28 successfully added!
+Do you want to add another event ? ('y' or 'n'): y
+
+*** Schedule an event ***
+What type of event do you want to schedule ?
+0. Concert
+1. Play
+Enter an option: 1
+Enter title: High School Musical
+Enter first date of representation (MM-dd): 01-01
+Enter last date of representation (MM-dd): 01-09
+Enter start time (HH[:mm]): 20
+Enter end time (HH[:mm]): 21
+Enter the audience capacity expected: 1000
+Play High School Musical, (1000 attenders), from 8:00 PM to 9:00 PM, on Saturday, January 1, Sunday, January 2, Monday, January 3, Tuesday, January 4, Wednesday, January 5, Thursday, January 6, Friday, January 7, Saturday, January 8, Sunday, January 9 successfully added!
+Do you want to add another event ? ('y' or 'n'): y
+
+*** Schedule an event ***
+What type of event do you want to schedule ?
+0. Concert
+1. Play
+Enter an option: 1
+Enter title: Eric Zemmour et ses kheys
+Enter first date of representation (MM-dd): 01-10
+Enter last date of representation (MM-dd): 01-17
+Enter start time (HH[:mm]): 18
+Enter end time (HH[:mm]): 18:02
+Enter the audience capacity expected: 1
+Play Eric Zemmour et ses kheys, (1 attenders), from 6:00 PM to 6:02 PM, on Monday, January 10, Tuesday, January 11, Wednesday, January 12, Thursday, January 13, Friday, January 14, Saturday, January 15, Sunday, January 16, Monday, January 17 successfully added!
+Do you want to add another event ? ('y' or 'n'): y
+
+*** Schedule an event ***
+What type of event do you want to schedule ?
+0. Concert
+1. Play
+Enter an option: 0
+Enter artist/group name: Elodie Costa
+Enter date (MM-dd): 01-13
+Enter start time (HH[:mm]): 19
+Enter end time (HH[:mm]): 20
+Enter the audience capacity expected: 500
+Concert of Elodie Costa, (500 attenders), from 7:00 PM to 8:00 PM, on Thursday, January 13 successfully added!
+Do you want to add another event ? ('y' or 'n'): n
+
+*** TOO LARGE CAPACITY EVENT ***
+Concert of Osabat, (5000 attenders), from 9:00 PM to 11:00 PM, on Monday, February 28 has a too large capacity, no venue can host it. Do you want to change capacity ? ('y' or 'n')
+WARNING: If you do not change it, the event will be cancelled!
+y
+Enter new capacity: 1500
+
+Program #9:
+ - Concert of Osabat, (1500 attenders), from 9:00 PM to 11:00 PM, on Monday, February 28 (Monday, February 28 at Venue 1).
+
+Program #2:
+ - Concert of Elodie Costa, (500 attenders), from 7:00 PM to 8:00 PM, on Thursday, January 13 (Thursday, January 13 at Venue 1).
+
+Program #1:
+ - Play High School Musical, (1000 attenders), from 8:00 PM to 9:00 PM, on Monday, January 3, Tuesday, January 4, Wednesday, January 5, Thursday, January 6, Friday, January 7, Saturday, January 8, Sunday, January 9 (Sunday, January 9 at Venue 1, Saturday, January 8 at Venue 1, Friday, January 7 at Venue 1, Thursday, January 6 at Venue 1, Wednesday, January 5 at Venue 1, Tuesday, January 4 at Venue 1, Monday, January 3 at Venue 1).
+
+Program #52:
+ - Play High School Musical, (1000 attenders), from 8:00 PM to 9:00 PM, on Saturday, January 1, Sunday, January 2 (Sunday, January 2 at Venue 1, Saturday, January 1 at Venue 1).
+
+Program #2:
+ - Concert of Elodie Costa, (500 attenders), from 7:00 PM to 8:00 PM, on Thursday, January 13 (Thursday, January 13 at Venue 1).
+ - Play Eric Zemmour et ses kheys, (1 attenders), from 6:00 PM to 6:02 PM, on Monday, January 10, Tuesday, January 11, Wednesday, January 12, Thursday, January 13, Friday, January 14, Saturday, January 15, Sunday, January 16 (Saturday, January 15 at Venue 1, Friday, January 14 at Venue 1, Thursday, January 13 at Venue 2, Wednesday, January 12 at Venue 1, Tuesday, January 11 at Venue 1, Monday, January 10 at Venue 1, Sunday, January 16 at Venue 1).
+
+Program #3:
+ - Play Eric Zemmour et ses kheys, (1 attenders), from 6:00 PM to 6:02 PM, on Monday, January 17 (Monday, January 17 at Venue 1).
+
+*** BISH RECAP ***
+
+Program #9:
+ - Concert of Osabat, (1500 attenders), from 9:00 PM to 11:00 PM, on Monday, February 28 (Monday, February 28 at Venue 1).
+
+Program #2:
+ - Concert of Elodie Costa, (500 attenders), from 7:00 PM to 8:00 PM, on Thursday, January 13 (Thursday, January 13 at Venue 1).
+ - Play Eric Zemmour et ses kheys, (1 attenders), from 6:00 PM to 6:02 PM, on Monday, January 10, Tuesday, January 11, Wednesday, January 12, Thursday, January 13, Friday, January 14, Saturday, January 15, Sunday, January 16 (Saturday, January 15 at Venue 1, Friday, January 14 at Venue 1, Thursday, January 13 at Venue 2, Wednesday, January 12 at Venue 1, Tuesday, January 11 at Venue 1, Monday, January 10 at Venue 1, Sunday, January 16 at Venue 1).
+
+Program #1:
+ - Play High School Musical, (1000 attenders), from 8:00 PM to 9:00 PM, on Monday, January 3, Tuesday, January 4, Wednesday, January 5, Thursday, January 6, Friday, January 7, Saturday, January 8, Sunday, January 9 (Sunday, January 9 at Venue 1, Saturday, January 8 at Venue 1, Friday, January 7 at Venue 1, Thursday, January 6 at Venue 1, Wednesday, January 5 at Venue 1, Tuesday, January 4 at Venue 1, Monday, January 3 at Venue 1).
+
+Program #52:
+ - Play High School Musical, (1000 attenders), from 8:00 PM to 9:00 PM, on Saturday, January 1, Sunday, January 2 (Sunday, January 2 at Venue 1, Saturday, January 1 at Venue 1).
+
+Program #3:
+ - Play Eric Zemmour et ses kheys, (1 attenders), from 6:00 PM to 6:02 PM, on Monday, January 17 (Monday, January 17 at Venue 1).
+
+Thank you for using our SH!
+
+Process finished with exit code 0

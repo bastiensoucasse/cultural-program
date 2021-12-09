@@ -36,87 +36,13 @@ public class App {
         return venues;
     }
 
-    /**
-     * 1. NO
-     * 2. OK
-     * 3. NON
-     * 4. OK
-     * <p>
-     * 5. NON
-     * <p>
-     * 6. OK
-     * <p>
-     * 7. NON
-     * 8. OK
-     * 9. NON
-     *
-     * @param index
-     * @return
-     */
-    private static List<Event> defaultEvents(int index) {
-        TimeSlot slot = new TimeSlot(LocalTime.of(20, 0), LocalTime.of(22, 0));
-        int capacity = 1000;
-        List<List<Event>> list = new ArrayList<>(List.of(new ArrayList<>(List.of( // OK
-                        new Concert("1Da", LocalDate.of(2022, 1, 4), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 6), slot, capacity), new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity))), new ArrayList<>(List.of( // OK
-                        new Concert("1Da", LocalDate.of(2022, 1, 4), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 6), slot, capacity), new Concert("1Dc", LocalDate.of(2022, 1, 7), slot, capacity), new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity))), new ArrayList<>(List.of( // OK
-                        new Concert("1Da", LocalDate.of(2022, 1, 4), slot, capacity), new Play("Eminem The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 7), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 8), slot, capacity), new Play("1D The Musical", LocalDate.of(2022, 1, 4), LocalDate.of(2022, 1, 6), slot, capacity))), new ArrayList<>(List.of( // OK
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 5), slot, capacity), new Concert("1D", LocalDate.of(2022, 1, 4), slot, capacity))),
-
-
-                new ArrayList<>(List.of( // OK
-                        // Pre scheduled
-                        new Play("Eminem The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity),
-
-                        // Trying to add that (just one of them)
-                        // new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity)
-                        // new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 8), slot, capacity)
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 8), slot, capacity))),
-
-
-                new ArrayList<>(List.of( // OK
-                        // Pre scheduled (just one of them)
-                        // new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
-                        // new Concert("1D", LocalDate.of(2022, 1, 9), slot, capacity),
-                        // new Play("Eminem The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 8), slot, capacity),
-                        new Play("Eminem The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 8), slot, capacity),
-
-                        // Trying to add that (just one of them)
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity)
-                        // new Play("1D The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity)
-                )),
-
-
-                new ArrayList<>(List.of( // OK
-                        // Pre scheduled
-                        new Concert("1Da", LocalDate.of(2022, 1, 8), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 9), slot, capacity),
-
-                        // Trying to add that
-                        // could start sooner, should be the same result
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity))), new ArrayList<>(List.of( // OK
-                        // Pre scheduled
-                        new Concert("1Da", LocalDate.of(2022, 1, 3), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 8), slot, capacity), new Concert("1Dc", LocalDate.of(2022, 1, 9), slot, capacity),
-
-                        // Trying to add that
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity))), new ArrayList<>(List.of( // OK
-                        // Pre scheduled
-                        new Concert("1Da", LocalDate.of(2022, 1, 3), slot, capacity), new Concert("1Db", LocalDate.of(2022, 1, 8), slot, capacity), new Concert("1Dc", LocalDate.of(2022, 1, 9), slot, capacity), new Play("Eminem The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 7), slot, capacity),
-
-                        // Trying to add that
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity))), new ArrayList<>(List.of(
-                        // Pre scheduled
-                        new Play("1D The Musical 1", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 9), slot, capacity), new Play("1D The Musical 2", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 9), slot, capacity), new Play("1D The Musical 3", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 9), slot, capacity),
-
-                        // Trying to add that
-                        new Concert("1D", LocalDate.of(2022, 1, 3), slot, capacity))), new ArrayList<>(List.of(
-                        // Pre scheduled
-                        new Concert("1Da", LocalDate.of(2022, 1, 3), slot, capacity), // 1
-                        new Concert("1Db1", LocalDate.of(2022, 1, 4), slot, capacity), // 1
-                        new Concert("1Db2", LocalDate.of(2022, 1, 4), slot, capacity), // 2
-                        new Concert("1Dc", LocalDate.of(2022, 1, 5), slot, capacity), // 1
-
-                        // Trying to add that
-                        new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity)))));
-        return list.get(index);
+    private static List<Event> defaultEvents() {
+        return new ArrayList<>(List.of(
+                // new Concert("Jack & Jack", LocalDate.of(2022, 1, 1), new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 0)), 1500),
+                // new Concert(…),
+                // new Play(…),
+                // …
+        ));
     }
 
     public static void main(String[] args) {
@@ -125,7 +51,9 @@ public class App {
         List<Venue> venueList = VenueUI.retrieveAllVenues();
         if (venueList.isEmpty()) venueList = defaultVenues();
         List<Event> eventList = EventUI.retrieveAllEvents();
-        // List<Event> eventList = defaultEvents(9); // Test
+
+        // Comment above and use below for testing
+        // List<Event> eventList = defaultEvents();
 
         List<Event> newEvents = new ArrayList<>();
 
