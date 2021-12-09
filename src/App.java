@@ -26,7 +26,8 @@ public class App {
     private static List<Venue> defaultVenues() {
         final List<Venue> venues = new ArrayList<>();
 
-        for (int i = 0; i < 4; i++) {
+        // TODO: Remettre le 4
+        for (int i = 0; i < 1; i++) {
             Map<DayOfWeek, TimeSlot> slots = new EnumMap<>(DayOfWeek.class);
             for (DayOfWeek day : DayOfWeek.values())
                 slots.put(day, new TimeSlot(LocalTime.of(18, 0), LocalTime.of(23, 0)));
@@ -36,10 +37,104 @@ public class App {
         return venues;
     }
 
-    private static List<Event> defaultEvents() {
-        return new ArrayList<>(List.of(
-                // TODO: Add test events as default events.
+    /**
+     * 1. NO
+     * 2. OK
+     * 3. NON
+     * 4. OK
+     * 
+     * 5. NON
+     * 
+     * 6. OK
+     * 
+     * 7. NON
+     * 8. OK
+     * 9. NON
+     * 
+     * @param index
+     * @return
+     */
+    private static List<Event> defaultEvents(int index) {
+        TimeSlot slot = new TimeSlot(LocalTime.of(20, 0), LocalTime.of(22, 0));
+        int capacity = 1000;
+        List<List<Event>> list = new ArrayList<>(List.of(
+            new ArrayList<>(List.of(
+                new Concert("1D", LocalDate.of(2022, 1, 4), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 6), slot, capacity),
+                new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity)
+            )),
+            new ArrayList<>(List.of(
+                new Concert("1D", LocalDate.of(2022, 1, 4), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 6), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 7), slot, capacity),
+                new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity)
+            )),
+            new ArrayList<>(List.of(
+                new Concert("1D", LocalDate.of(2022, 1, 4), slot, capacity),
+                new Play("Eminem The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 7), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
+                new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 6), slot, capacity)
+            )),
+            new ArrayList<>(List.of(
+                new Play("1D The Musical", LocalDate.of(2022, 1, 3), LocalDate.of(2022, 1, 5), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 4), slot, capacity)
+            )),
+
+
+            new ArrayList<>(List.of(
+                // Pre scheduled 
+                new Play("Eminem The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity),
+
+                // Trying to add that (just one of them)
+                // new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity)
+                // new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 8), slot, capacity),
+                new Play("1D The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 8), slot, capacity)
+            )),
+
+
+            new ArrayList<>(List.of(
+                // Pre scheduled (just one of them)
+                // new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
+                // new Concert("1D", LocalDate.of(2022, 1, 9), slot, capacity),
+                // new Play("Eminem The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 8), slot, capacity),
+                new Play("Eminem The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 8), slot, capacity),
+                
+                // Trying to add that
+                //new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity)
+                new Play("1D The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity)
+            )),
+
+
+            new ArrayList<>(List.of(
+                // Pre scheduled 
+                new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 9), slot, capacity),
+
+                // Trying to add that
+                // could start sooner, should be the same result
+                new Play("1D The Musical", LocalDate.of(2022, 1, 8), LocalDate.of(2022, 1, 9), slot, capacity)
+            )),
+            new ArrayList<>(List.of(
+                // Pre scheduled 
+                new Concert("1D", LocalDate.of(2022, 1, 3), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 9), slot, capacity),
+
+                // Trying to add that
+                new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity)
+            )),
+            new ArrayList<>(List.of(
+                // Pre scheduled 
+                new Concert("1D", LocalDate.of(2022, 1, 3), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 8), slot, capacity),
+                new Concert("1D", LocalDate.of(2022, 1, 9), slot, capacity),
+                new Play("Eminem The Musical", LocalDate.of(2022, 1, 6), LocalDate.of(2022, 1, 7), slot, capacity),
+
+                // Trying to add that
+                new Play("1D The Musical", LocalDate.of(2022, 1, 7), LocalDate.of(2022, 1, 9), slot, capacity)
+            ))
         ));
+        return list.get(index);
     }
 
     public static void main(String[] args) {
@@ -69,7 +164,7 @@ public class App {
                 // Split the event into one for each week it is in if necessary
                 final Map<Integer, List<LocalDate>> datesPerWeek = new HashMap<>();
                 for (final LocalDate d : event.getDates()) {
-                    final int week = d.get(WeekFields.SUNDAY_START.weekOfWeekBasedYear());
+                    final int week = d.get(WeekFields.ISO.weekOfWeekBasedYear());
                     if (!datesPerWeek.containsKey(week)) datesPerWeek.put(week, new ArrayList<>(List.of(d)));
                     else datesPerWeek.get(week).add(d);
                 }
@@ -89,12 +184,12 @@ public class App {
                     continue;
                 }
 
-                final int week = event.getDates().get(0).get(WeekFields.SUNDAY_START.weekOfWeekBasedYear());
+                final int week = event.getDates().get(0).get(WeekFields.ISO.weekOfWeekBasedYear());
                 final Program program = weekList.contains(week) ? MEMORY_REPO.findProgramById(week) : new Program(week, venueList);
                 if (!weekList.contains(week)) weekList.add(week);
 
                 final List<LocalDate> weekDates = event.getDates();
-                if (weekDates.removeIf(d -> d.get(WeekFields.SUNDAY_START.weekOfWeekBasedYear()) != week)) {
+                if (weekDates.removeIf(d -> d.get(WeekFields.ISO.weekOfWeekBasedYear()) != week)) {
                     if (weekDates.isEmpty()) continue;
                     event.setDates(weekDates);
                 }
