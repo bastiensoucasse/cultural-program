@@ -7,6 +7,7 @@ import java.util.Objects;
 
 /**
  * Venue (place for an event).
+ * Can only host one event per day.
  * (Entity)
  *
  * @author Bastien Soucasse

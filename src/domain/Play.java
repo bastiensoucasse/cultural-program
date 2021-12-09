@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 /**
  * Play (cultural event) during several days.
+ * Has a representation each and every day between startDate and endDate included.
+ * Also, the time slot is the same for every representations.
  *
  * @author Bastien Soucasse
  * @author Iantsa Provost
