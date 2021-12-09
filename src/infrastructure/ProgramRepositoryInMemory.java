@@ -6,6 +6,12 @@ import domain.ProgramRepository;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ???
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
 public class ProgramRepositoryInMemory implements ProgramRepository {
     private final Map<Integer, Program> programMap = new HashMap<>();
 

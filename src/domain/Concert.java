@@ -2,6 +2,12 @@ package domain;
 
 import java.time.LocalDate;
 
+/**
+ * ???
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
 public class Concert extends Event {
     private final String artist;
 
@@ -18,6 +24,6 @@ public class Concert extends Event {
 
     @Override
     public String toString() {
-        return "Concert of " + super.toString();
+        return "Concert of " + artist + ", " + super.toString();
     }
 }

@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
+
+
+/**
+ * ???
+ * (Entity)
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost 
+ */
 
 @JsonTypeInfo(use = NAME, include = PROPERTY)
 @JsonSubTypes({
@@ -50,6 +60,99 @@ public abstract class Event {
         return capacity;
     }
 
+    /**
+     * Checks if the event has no date on SATURDAY and SUNDAY.
+     */
+    public boolean isNotWE() {
+        for (final LocalDate date : dates)
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY)
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Checks if the event has a date on SATURDAY.
+     */
+    public boolean isWESat() {
+        for (final LocalDate date : dates)
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
+                return true;
+        return false;
+    }
+
+    /**
+     * Checks if the event has a date on SUNDAY.
+     */
+    public boolean isWESun() {
+        for (final LocalDate date : dates)
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
+                return true;
+        return false;
+    }
+
+    /**
+     * Checks if the event has a date on SATURDAY or SUNDAY (but not both).
+     */
+    public boolean isPartlyWE() {
+        boolean sat = false, sun = false;
+
+        for (final LocalDate date : dates) {
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
+                sat = true;
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
+                sun = true;
+        }
+
+        if (sat && sun) return false;
+        return sat || sun;
+    }
+
+    /**
+     * Checks if the event has a date on both SATURDAY and SUNDAY.
+     */
+    public boolean isFullyWE() {
+        boolean sat = false, sun = false;
+
+        for (final LocalDate date : dates) {
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
+                sat = true;
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
+                sun = true;
+        }
+
+        return sat && sun;
+    }
+
+    /**
+     * Checks if the event has a date on only SATURDAY or SUNDAY.
+     */
+    public boolean isOnlyWE() {
+        for (final LocalDate date : dates)
+            if (date.getDayOfWeek() == DayOfWeek.MONDAY || date.getDayOfWeek() == DayOfWeek.TUESDAY || date.getDayOfWeek() == DayOfWeek.WEDNESDAY || date.getDayOfWeek() == DayOfWeek.THURSDAY || date.getDayOfWeek() == DayOfWeek.FRIDAY)
+                return false;
+
+        return true;
+    }
+
+    /**
+     * Checks if the event has a date on both SATURDAY and SUNDAY and only them.
+     */
+    public boolean isFullAndOnlyWE() {
+        boolean sat = false, sun = false;
+
+        for (final LocalDate date : dates) {
+            if (date.getDayOfWeek() == DayOfWeek.MONDAY || date.getDayOfWeek() == DayOfWeek.TUESDAY || date.getDayOfWeek() == DayOfWeek.WEDNESDAY || date.getDayOfWeek() == DayOfWeek.THURSDAY || date.getDayOfWeek() == DayOfWeek.FRIDAY)
+                return false;
+            if (date.getDayOfWeek() == DayOfWeek.SATURDAY)
+                sat = true;
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY)
+                sun = true;
+        }
+
+        return sat && sun;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -67,6 +170,17 @@ public abstract class Event {
 
     @Override
     public String toString() {
-        return "(" + capacity + " attenders): " + slot;
+        String s = "from " + slot + "(" + capacity + " attenders), on ";
+        boolean first = true;
+        for (final LocalDate d : dates) {
+            if (first) first = false;
+            else s += ", ";
+            s += d.getDayOfWeek().name().toLowerCase();
+        }
+        return s + ".";
+    }
+
+    public String toStringWithoutDates() {
+        return "from " + slot + "(" + capacity + " attenders)";
     }
 }

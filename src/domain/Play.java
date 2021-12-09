@@ -2,6 +2,12 @@ package domain;
 
 import java.time.LocalDate;
 
+/**
+ * ???
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
 public class Play extends Event {
     private final String title;
 
@@ -21,6 +27,6 @@ public class Play extends Event {
 
     @Override
     public String toString() {
-        return "Play " + super.toString();
+        return "Play " + title + ", " + super.toString();
     }
 }

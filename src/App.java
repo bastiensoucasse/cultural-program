@@ -1,17 +1,12 @@
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.NamedType;
-
-import domain.Concert;
 import domain.Event;
-import domain.Play;
 import domain.Program;
 import domain.ProgramRepository;
 import domain.TimeSlot;
@@ -22,13 +17,17 @@ import ui.AppUI;
 import ui.EventUI;
 import ui.VenueUI;
 
+/**
+ * ???
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
 public class App {
     private static final ProgramRepository MEMORY_REPO = new ProgramRepositoryInMemory();
     private static final ProgramRepository FILE_REPO = new ProgramRepositoryInFile();
-    private static List<Integer> weeks = new ArrayList<>();
-    private static List<Venue> venueList;
-    private static List<Event> eventList;
 
+    private static final List<Integer> weekList = new ArrayList<>();
     private static List<Venue> defaultVenues() {
         final List<Venue> venues = new ArrayList<>();
 
@@ -43,51 +42,48 @@ public class App {
     }
 
     public static void main(String[] args) {
+        // Launch and initialize the venues and events
         AppUI.launch();
-        venueList = VenueUI.retrieveAllVenues();
-        if (venueList.isEmpty())
-            venueList = defaultVenues();
-        eventList = EventUI.retrieveAllEvents();
+        List<Venue> venueList = VenueUI.retrieveAllVenues();
+        if (venueList.isEmpty()) venueList = defaultVenues();
+        List<Event> eventList = EventUI.retrieveAllEvents();
+        List<Event> newEventList = new ArrayList<>();
 
-        for (Event event : eventList) {
-            final int week = event.getDates().get(0).getDayOfYear() / 7 + 1;
-            final Program program = weeks.contains(week) ? MEMORY_REPO.findProgramById(week) : new Program(week, venueList);
-            if (!weeks.contains(week)) weeks.add(week);
+        while (!eventList.isEmpty()) {
+            // Try to add each event
+            for (final Event event : eventList) {
+                // Get all the weeks the event is in
+                final List<Integer> eventWeekList = new ArrayList<>();
+                for (final LocalDate d : event.getDates()) {
+                    final int week = d.getDayOfYear() / 7 + 1;
+                    if (!eventWeekList.contains(week)) eventWeekList.add(week);
+                }
 
-            if (!program.add(event)) {
-                // TODO: ça marche pas
+                // Add the event to all concerned weekly programs
+                for (final int week : eventWeekList) {
+                    final Program program = weekList.contains(week) ? MEMORY_REPO.findProgramById(week) : new Program(week, venueList);
+                    if (!weekList.contains(week)) weekList.add(week);
+                    
+                    if (!program.add(event)) newEventList.addAll(EventUI.reloadEvents(new ArrayList<>(List.of(event))));
+
+                    final List<Event> removedEventList = program.getRemovedEvents();
+                    if (!removedEventList.isEmpty()) {
+                        AppUI.displayRemovedEvents(removedEventList);
+                        newEventList.addAll(EventUI.reloadEvents(removedEventList));
+                        program.clearRemovedEvents();
+                    }
+
+                    MEMORY_REPO.saveProgram(program);
+                    // FILE_REPO.saveProgram(program);
+                }
             }
 
-            final List<Event> removedEventList = program.getRemovedEvents();
-            if (!removedEventList.isEmpty()) {
-                AppUI.displayRemovedEvents(removedEventList);
-                program.clearRemovedEvents();
-            }
-
-            MEMORY_REPO.saveProgram(program);
-            FILE_REPO.saveProgram(program);
+            eventList = newEventList;
+            newEventList.clear();
         }
 
-        // for (int week : weeks) AppUI.displayProgram(MEMORY_REPO.findProgramById(week));
-        // for (int week : weeks) AppUI.displayProgram(FILE_REPO.findProgramById(week));
+        // Display the programs and quit
+        for (final int week : weekList) AppUI.displayProgram(MEMORY_REPO.findProgramById(week));
         AppUI.quit();
     }
 }
-
-// events.add(new Concert("Eminem", LocalDate.of(YEAR, 1, 1),
-// new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 00)), 1500));
-// events.add(new Concert("Jack & Jack", LocalDate.of(YEAR, 1, 1),
-// new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 0)), 1000));
-// events.add(new Concert("One Direction", LocalDate.of(YEAR, 1, 1),
-// new TimeSlot(LocalTime.of(18, 0), LocalTime.of(21, 0)), 1500));
-// events.add(new Concert("René La Taupe", LocalDate.of(YEAR, 1, 1),
-// new TimeSlot(LocalTime.of(18, 0), LocalTime.of(18, 10)), 12));
-// events.add(new Concert("Jack & Jack", LocalDate.of(YEAR, 1, 2),
-// new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 0)), 1000));
-// events.add(new Concert("One Direction", LocalDate.of(YEAR, 1, 3),
-// new TimeSlot(LocalTime.of(18, 0), LocalTime.of(21, 0)), 1500));
-// events.add(new Play("High School Musical", LocalDate.of(YEAR, 1, 1),
-// LocalDate.of(YEAR, 1, 5),
-// new TimeSlot(LocalTime.of(19, 30), LocalTime.of(21, 30)), 800));
-// events.add(new Concert("Eminem", LocalDate.of(YEAR, 1, 2),
-// new TimeSlot(LocalTime.of(21, 0), LocalTime.of(23, 00)), 1500));

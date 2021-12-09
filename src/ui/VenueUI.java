@@ -10,20 +10,32 @@ import java.util.Map;
 import domain.TimeSlot;
 import domain.Venue;
 
+/**
+ * Venue UI
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
+
 public class VenueUI extends AbstractUI {
 
+    /**
+     * Ask user for information to initialize a venue.
+     * 
+     * @return Venue created
+     */
     public static Venue retrieveVenue() {
-        System.out.println("*** Add a venue ***");
+        System.out.println("\n*** Add a venue ***");
 
         System.out.print("Enter capacity: ");
         final int capacity = Integer.parseInt(retrieveInfo());
 
         final Map<DayOfWeek, TimeSlot> openingHours = new EnumMap<>(DayOfWeek.class);
         for (DayOfWeek d : DayOfWeek.values()) {
-            System.out.printf("Enter open time for %s (HH:mm): ", d.name().toLowerCase());
+            System.out.printf("Enter open time for %s (HH[:mm]): ", d.name().toLowerCase());
             final LocalTime openTime = LocalTime.parse(retrieveInfo(), tf);
 
-            System.out.printf("Enter close time for %s (HH:mm): ", d.name().toLowerCase());
+            System.out.printf("Enter close time for %s (HH[:mm]): ", d.name().toLowerCase());
             final LocalTime closeTime = LocalTime.parse(retrieveInfo(), tf);
 
             final TimeSlot slot = new TimeSlot(openTime, closeTime);
@@ -36,7 +48,12 @@ public class VenueUI extends AbstractUI {
         return venue;
     }
 
-    
+    /**
+     * Ask user to initialize each of the 4 venues of JolieCité, if they want to.
+     * Will use default setting otherwise.
+     * 
+     * @return List of the 4 initialized venues
+     */
     public static List<Venue> retrieveAllVenues() {
         System.out.println("*** VENUE INITIALIZER *** ");
         System.out.println("Reminder: There are 4 venues in JolieCité.");

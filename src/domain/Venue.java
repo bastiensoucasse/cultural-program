@@ -5,6 +5,13 @@ import java.time.LocalTime;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * ???
+ * (Entity)
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
 public class Venue {
     private static int numVenues = 0;
 

@@ -5,25 +5,34 @@ import java.util.List;
 import domain.Event;
 import domain.Program;
 
+/**
+ * UI application
+ * 
+ * @author Bastien Soucasse
+ * @author Iantsa Provost
+ */
+
 public class AppUI {
+
     public static void launch() {
-        System.out.println("*** WELCOME TO BISH (stands for Bastien & Iantsa's Scheduling Helper) ***");
+        System.out.println("\n*** WELCOME TO BISH (stands for Bastien & Iantsa's Scheduling Helper) ***");
     }
 
+
     public static void quit() {
-        System.out.println("Thank you for using our SH!");
-        System.out.println("Find your programs in the files \"Week[week_number].json\"");
-        System.out.println("See you soon *smack* <3");
+        System.out.println("\nThank you for using our SH!");
+        // System.out.println("Find your programs in the files \"Week[week_number].json\"");
     }
     
+
     public static void displayProgram(Program program) {
         System.out.println(program);
     }
 
+    
     public static void displayRemovedEvents(List<Event> eventList) {
-        System.out.println("The following events had to be removed: ");
+        System.out.println("\nThe following events had to be removed: ");
         for (Event e : eventList)
             System.out.println(e);
-        System.out.println("Do not forget to add them again!");
     }
 }
