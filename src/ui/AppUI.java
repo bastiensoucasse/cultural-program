@@ -11,7 +11,6 @@ import java.util.List;
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
-
 public class AppUI {
     public static void launch() {
         System.out.println("\n*** WELCOME TO BISH (stands for Bastien & Iantsa's Scheduling Helper) ***");
@@ -22,12 +21,12 @@ public class AppUI {
         // System.out.println("Find your programs in the files \"Week[week_number].json\"");
     }
 
-    public static void displayProgram(Program program) {
+    public static void displayProgram(final Program program) {
         System.out.println(program);
     }
 
-    public static void displayRemovedEvents(List<Event> eventList) {
+    public static void displayRemovedEvents(final List<Event> eventList) {
         System.out.println("\nThe following events had to be removed: ");
-        for (Event e : eventList) System.out.println(e);
+        for (final Event e : eventList) System.out.println(e);
     }
 }

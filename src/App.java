@@ -143,8 +143,10 @@ public class App {
         List<Venue> venueList = VenueUI.retrieveAllVenues();
         if (venueList.isEmpty()) venueList = defaultVenues();
         List<Event> eventList = EventUI.retrieveAllEvents();
-        if (eventList.isEmpty()) eventList = defaultEvents();
+
+
         List<Event> newEvents = new ArrayList<>();
+        List<Event> droppedEvents = new ArrayList<>();
 
         // Try to add each event
         while (!eventList.isEmpty()) {
@@ -159,7 +161,10 @@ public class App {
                         else event.setCapacity(capacity);
                     }
                 }
-                if (!canBeHosted) continue;
+                if (!canBeHosted) {
+                    droppedEvents.add(event);
+                    continue;
+                }
 
                 // Split the event into one for each week it is in if necessary
                 final Map<Integer, List<LocalDate>> datesPerWeek = new HashMap<>();
@@ -200,12 +205,15 @@ public class App {
                 if (!removedEventList.isEmpty()) {
                     AppUI.displayRemovedEvents(removedEventList);
                     newEvents.addAll(EventUI.reloadEvents(removedEventList));
-                    program.clearRemovedEvents();
+                    program.clearRemovedEventList();
                 }
 
                 MEMORY_REPO.saveProgram(program);
                 // FILE_REPO.saveProgram(program);
             }
+
+            newEvents.addAll(EventUI.giveUpOnEvents(droppedEvents));
+            droppedEvents.clear();
 
             eventList.clear();
             eventList.addAll(newEvents);

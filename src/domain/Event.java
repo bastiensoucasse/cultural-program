@@ -13,9 +13,8 @@ import java.util.Objects;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY;
 import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 
-
 /**
- * Event (can't be instantiated) representing either a Concert or a Play.
+ * Cultural event (can't be instantiated as is) representing either a Concert or a Play.
  * (Entity)
  *
  * @author Bastien Soucasse
@@ -77,19 +76,21 @@ public abstract class Event {
 
     /**
      * Checks if the event has a date on SATURDAY.
+     *
+     * @return <code>true</code> if the event is on SATURDAY; <code>false</code> otherwise.
      */
     public boolean isOnSaturday() {
-        for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.SATURDAY) return true;
+        for (final LocalDate date : dates) if (date.getDayOfWeek() == DayOfWeek.SATURDAY) return true;
         return false;
     }
 
     /**
      * Checks if the event has a date on SUNDAY.
+     *
+     * @return <code>true</code> if the event is on SUNDAY; <code>false</code> otherwise.
      */
     public boolean isOnSunday() {
-        for (final LocalDate date : dates)
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY) return true;
+        for (final LocalDate date : dates) if (date.getDayOfWeek() == DayOfWeek.SUNDAY) return true;
         return false;
     }
 

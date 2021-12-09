@@ -21,7 +21,7 @@ public class Program {
     private final Map<Event, Map<LocalDate, Venue>> eventMap = new HashMap<>();
     private final transient Map<Venue, Integer> numConcerts;
     private final transient Map<Venue, Integer> numPlays;
-    private transient List<Event> removedEvents = new ArrayList<>();
+    private transient List<Event> removedEventList = new ArrayList<>();
 
     public Program(final int id, final List<Venue> venueList) {
         this.id = id;
@@ -54,18 +54,17 @@ public class Program {
     }
 
     public List<Event> getRemovedEvents() {
-        return removedEvents;
+        return removedEventList;
     }
 
     /**
      * Checks if a venue is available at a given date.
      *
-     * @param venue …
-     * @param date  …
-     * @return …
+     * @param venue The venue to check.
+     * @param date  The date to check.
+     * @return <code>true</code> if the venue is available; <code>false</code> otherwise.
      */
     private boolean venueIsAvailable(final Venue venue, final LocalDate date) {
-        // If (at least) one event has (at least) one date at venue, it's not available
         for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet()) {
             final Map<LocalDate, Venue> venues = entry.getValue();
             if (venues.containsKey(date) && venues.get(date).equals(venue)) return false;
@@ -77,18 +76,17 @@ public class Program {
     /**
      * Checks if the venue is empty.
      *
-     * @param venue …
-     * @return …
+     * @param venue The venue to check.
+     * @return <code>true</code> if the venue is empty; <code>false</code> otherwise.
      */
     private boolean venueIsEmpty(final Venue venue) {
-        // If there are no concerts not plays, it's empty
         return numConcerts.get(venue) == 0 && numPlays.get(venue) == 0;
     }
 
     /**
      * Checks if it's possible to use a new (empty) venue.
      *
-     * @return true if there will be at least one venue available after; false otherwise.
+     * @return <code>true</code> if there will be at least one venue available after; <code>false</code> otherwise.
      */
     private boolean canUseNewVenue() {
         int emptyVenues = 0;
@@ -102,21 +100,18 @@ public class Program {
     /**
      * Finds a free venue at a given date and time slot for a given capacity.
      *
-     * @param date     …
-     * @param slot     …
-     * @param capacity …
-     * @return …
+     * @param date     The date to consider.
+     * @param slot     The time slot to consider.
+     * @param capacity The capacity asked by the event.
+     * @return The venue found if so; <code>null</code> otherwise.
      */
     private Venue findFreeVenue(final LocalDate date, final TimeSlot slot, final int capacity) {
         for (final Venue venue : venueList) {
-            // If the venue is closed, can't host for such capacity, or not available, check the next one
             if (!venue.isOpened(date.getDayOfWeek(), slot) || !venue.canHost(capacity) || !venueIsAvailable(venue, date))
                 continue;
 
-            // If the venue is not empty, we can use this one
             if (!venueIsEmpty(venue)) return venue;
 
-            // The venue is empty, if it's possible to use a new one, use this one
             if (canUseNewVenue()) return venue;
         }
 
@@ -126,13 +121,12 @@ public class Program {
     /**
      * Finds a free venue for each date of an event.
      *
-     * @param event …
-     * @return …
+     * @param event The event to consider.
+     * @return The map of venue found per date of the event.
      */
     private Map<LocalDate, Venue> findFreeVenues(final Event event) {
         final Map<LocalDate, Venue> venues = new HashMap<>();
 
-        // Adds the venue found for each date
         for (final LocalDate date : event.getDates()) {
             final Venue venue = findFreeVenue(date, event.getSlot(), event.getCapacity());
             if (venue != null) venues.put(date, venue);
@@ -142,16 +136,15 @@ public class Program {
     }
 
     /**
-     * Gets the list of events that overlap with a given event, at a given venue.
+     * Gets the list of events that overlap with a given event, in a given venue.
      *
-     * @param event …
-     * @param venue …
-     * @return …
+     * @param event The event to consider.
+     * @param venue The venue to look into.
+     * @return The list of events that overlap with the event in the venue.
      */
     private List<Event> getOverlapEvents(final Event event, final Venue venue) {
         final List<Event> overlapEvents = new ArrayList<>();
 
-        // Adds the event if it shares (at least) one date at the same venue.
         for (final Entry<Event, Map<LocalDate, Venue>> entry : eventMap.entrySet())
             for (final LocalDate date : event.getDates()) {
                 final Map<LocalDate, Venue> venues = entry.getValue();
@@ -164,22 +157,15 @@ public class Program {
     /**
      * Checks if an event list contains an instance of a class.
      *
-     * @param events …
-     * @param clazz  …
-     * @return …
+     * @param events The event list to look into.
+     * @param clazz  The class wanted.
+     * @return <code>true</code> if an instance of the class was found; <code>false</code> otherwise.
      */
     private boolean eventsContainsInstanceOf(final List<Event> events, Class<?> clazz) {
         for (final Event e : events) if (e.getClass() == clazz) return true;
         return false;
     }
 
-    /**
-     * Checks if a venue can host a complete event if it modifies some of its own events.
-     *
-     * @param venue …
-     * @param event …
-     * @return …
-     */
     private boolean canVenueHostEventIfModifyAlt(final Venue venue, final Event event) {
         // If the venue can't host for such capacity or is closed, NO
         if (!venue.canHost(event.getCapacity())) return false;
@@ -258,10 +244,11 @@ public class Program {
 
     /**
      * Checks if a venue can host a complete event if it modifies some of its own events.
+     * The modification will consist on rescheduling or removing the events that overlap with this event.
      *
-     * @param venue …
-     * @param event …
-     * @return …
+     * @param venue The venue to check.
+     * @param event The event to consider.
+     * @return <code>true</code> if the venue can host the event after modification; <code>false</code> otherwise.
      */
     private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
         // If the venue can't host for such capacity or is closed, NO
@@ -278,54 +265,51 @@ public class Program {
             if (e.isOnSunday()) sun = true;
         }
 
-        // --------- //
-        // ALGORITHM //
-        // --------- //
-
-        // on veut pas se mettre sur le full we
+        // The new event is not on the whole weekend
         if (!event.isOnSaturday() || !event.isOnSunday()) {
-            // pas de collision sur le full we
+            // The overlap events are not on the whole weekend
             if (!sat || !sun) {
-                // on veut ajouter un concert et y en a pas encore, OUI
+                // The new event is a concert, and it's the first one in the week in this venue, YES
                 if (event instanceof Concert && numConcerts.get(venue) == 0) return true;
 
-                // on est plus long
+                // The new event is longer than all the events that overlap
                 if (event.getDates().size() > sum) {
-                    // on écrase pas tous les concerts, OUI ; sinon, NON
+                    // There are still concerts in the week in the venue, YES; otherwise, NO
                     return concerts != numConcerts.get(venue);
                 }
 
-                // sinon, NON
+                // Otherwise, NO
                 return false;
             }
 
-            // collision sur le full we, NON
+            // The overlap events are on the whole weekend, NO
             return false;
         }
 
-        // on veut se mettre sur le full we
+        // The new event is on the whole weekend
 
-        // pas de collision sur le full we, OUI
+        // The overlap events are not on the whole weekend, YES
         if (!sat || !sun) return true;
 
-        // collision sur le full we
-        // on écrase tous les concerts, NON
+        // The overlap events are on the whole weekend
+
+        // All the concerts of the venue in the week overlap, NO
         if (concerts == numConcerts.get(venue)) return false;
 
-        // on est plus long, OUI, sinon NON
+        // The new event is longer than all the events that overlap, YES; otherwise NO
         return event.getDates().size() > sum;
     }
 
     /**
      * Finds a venue for an event by modifying other events schedule.
      *
-     * @param event …
-     * @return …
+     * @param event The event to consider.
+     * @return The venue found if so; <code>null</code> otherwise.
      */
     private Venue findVenueByModifying(final Event event) {
         for (final Venue venue : venueList)
             if (canVenueHostEventIfModify(venue, event)) {
-                removedEvents = new ArrayList<>(getOverlapEvents(event, venue));
+                removedEventList = new ArrayList<>(getOverlapEvents(event, venue));
                 return venue;
             }
 
@@ -335,8 +319,8 @@ public class Program {
     /**
      * Finds a venue for each event date.
      *
-     * @param event …
-     * @return …
+     * @param event The event to consider.
+     * @return The map of venue found per date of event.
      */
     private Map<LocalDate, Venue> findVenues(final Event event) {
         // Try to get free venues
@@ -352,112 +336,21 @@ public class Program {
         return venues;
     }
 
-    // private Venue findVenue(final LocalDate date, final Event newEvent) {
-    // // Find an available venue
-    // for (final Venue venue : venueList) {
-    // // If venue is closed, we don't care
-    // if (!venue.isOpened(date.getDayOfWeek(), newEvent.getTimeSlot())) continue;
-
-    // boolean venueAvailable = true;
-
-    // for (final Event existingEvent : eventMap.keySet()) {
-    // final Map<LocalDate, Venue> v = eventMap.get(existingEvent);
-    // if (v.keySet().contains(date) && v.get(date).equals(venue))
-    // venueAvailable = false;
-    // }
-
-    // if (venueAvailable) {
-    // if (numConcerts.get(venue) == 0 && numPlays.get(venue) == 0) {
-    // if (canUseNewVenue())
-    // return venue;
-    // } else
-    // return venue;
-    // }
-    // }
-
-    // // Find a venue that can remove an existing event
-    // for (final Venue venue : venueList) {
-    // // If venue is closed, we don't care
-    // if (!venue.isOpened(date.getDayOfWeek(), newEvent.getTimeSlot())) continue;
-
-    // for (final Event existingEvent : eventMap.keySet()) {
-    // if ()
-
-    // for (LocalDate existingEventDate : existingEvent.getDates()) {
-    // // If the existing event is not at this date, or not at this venue, we don't
-    // care
-    // if (!date.isEqual(existingEventDate) ||
-    // !eventMap.get(existingEvent).get(existingEventDate).equals(venue)) continue;
-
-    // boolean ok = false;
-
-    // // If we have a concert
-    // if (newEvent.getClass() == Concert.class) {
-    // // If the existing event is a play
-    // if (existingEvent.getClass() == Play.class) {
-    // // If there are no concerts here yet, ok
-    // if (numConcerts.get(venue) == 0)
-    // if (eventHasWE(newEvent)) ok = true;
-    // }
-    // }
-
-    // // If we have a play
-    // if (newEvent.getClass() == Play.class) {
-    // // If the play is (at least) the whole weekend, ok
-    // final List<LocalDate> eventDates = newEvent.getDates();
-    // boolean sat = false, sun = false;
-    // for (LocalDate d : eventDates) {
-    // if (d.getDayOfWeek() == DayOfWeek.SATURDAY) sat = true;
-    // if (d.getDayOfWeek() == DayOfWeek.SUNDAY) sun = true;
-    // }
-    // if (sat && sun) ok = true;
-
-    // // If the existing event is a concert
-    // if (!ok && existingEvent.getClass() == Concert.class) {
-    // // If there is another concert, ok
-    // if (numConcerts.get(venue) > 1)
-    // ok = true;
-    // }
-
-    // // If the existing event is a play
-    // if (!ok && existingEvent.getClass() == Play.class) {
-    // // If the new play has more dates, ok
-    // if (newEvent.getDates().size() > existingEvent.getDates().size())
-    // ok = true;
-    // }
-    // }
-
-    // // If ok, try to relocate, or remove event
-    // if (ok) {
-    // final Venue relocation = findVenue(date, existingEvent);
-    // if (relocation != null) eventMap.get(existingEvent).replace(date,
-    // relocation);
-    // else removedEvents.add(existingEvent);
-    // return venue;
-    // }
-    // }
-    // }
-    // }
-
-    // return null;
-    // }
-
-    // private Map<LocalDate, Venue> findVenues(final Event event) {
-    // Map<LocalDate, Venue> dateVenue = new HashMap<>();
-    // for (final LocalDate date : event.getDates()) {
-    // final Venue venue = findVenue(date, event);
-    // if (venue != null) dateVenue.put(date, venue);
-    // }
-    // return dateVenue;
-    // }
-
-    public void clearRemovedEvents() {
-        if (removedEvents.size() == 0) return;
-        for (Event e : removedEvents)
-            eventMap.remove(e);
-        removedEvents.clear();
+    /**
+     * Clear the removed event list.
+     */
+    public void clearRemovedEventList() {
+        if (removedEventList.size() == 0) return;
+        for (Event e : removedEventList) eventMap.remove(e);
+        removedEventList.clear();
     }
 
+    /**
+     * Adds an event to the program of the week if possible.
+     *
+     * @param event The event to add.
+     * @return <code>true</code> if the event has been successfully added; <code>false</code> otherwise.
+     */
     public boolean add(final Event event) {
         final Map<LocalDate, Venue> venues = findVenues(event);
         if (venues.isEmpty()) return false;

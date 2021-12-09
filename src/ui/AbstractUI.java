@@ -14,17 +14,19 @@ public class AbstractUI {
     protected static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Retrieve information entered by user, as a String
+     * Retrieves information entered by user, as a string.
      *
-     * @return String entered
+     * @return The input string.
      */
     protected static String retrieveInfo() {
         String info = null;
+
         try {
             info = scanner.nextLine();
         } catch (final Exception e) {
             e.printStackTrace();
         }
+
         return info;
     }
 }

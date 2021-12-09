@@ -8,9 +8,7 @@ import domain.TimeSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Event UI.
@@ -18,15 +16,14 @@ import java.util.Map;
  * @author Bastien Soucasse
  * @author Iantsa Provost
  */
-
 public class EventUI extends AbstractUI {
     protected static int year = 2022;
 
     /**
-     * Ask user for information needed to create an event.
+     * Asks the user for information needed to create an event.
      * User should enter valid input, according to what is asked.
      *
-     * @return created Event
+     * @return The created event.
      */
     public static Event retrieveEvent() {
         System.out.println("\n*** Schedule an event *** ");
@@ -37,12 +34,10 @@ public class EventUI extends AbstractUI {
         System.out.print("Enter an option: ");
         int eventType = Integer.parseInt(retrieveInfo());
 
-
         if (eventType == 0) // should not be -1
             System.out.print("Enter artist/group name: ");
         else System.out.print("Enter title: ");
         String artist_title = retrieveInfo();
-
 
         if (eventType == 0) // should not be -1
             System.out.print("Enter date (MM-dd): ");
@@ -56,7 +51,6 @@ public class EventUI extends AbstractUI {
             endDate = LocalDate.parse(year + "-" + retrieveInfo());
         }
 
-
         System.out.print("Enter start time (HH[:mm]): ");
         LocalTime startTime = LocalTime.parse(retrieveInfo(), tf);
 
@@ -65,7 +59,6 @@ public class EventUI extends AbstractUI {
 
         TimeSlot slot = new TimeSlot(startTime, endTime);
 
-
         System.out.print("Enter the audience capacity expected: ");
         int capacity = Integer.parseInt(retrieveInfo());
 
@@ -73,16 +66,15 @@ public class EventUI extends AbstractUI {
         if (eventType == 0) event = new Concert(artist_title, date, slot, capacity);
         else event = new Play(artist_title, date, endDate, slot, capacity);
 
-
         System.out.println(event + " successfully added!");
         return event;
     }
 
     /**
-     * Allow user to create as many events as they want/need.
+     * Allows the user to create as many events as they want/need.
      * User should enter valid input, according to what is asked.
      *
-     * @return List of created Event
+     * @return The list of created events.
      */
     public static List<Event> retrieveAllEvents() {
         System.out.println("\n*** EVENT ADDER ***");
@@ -102,12 +94,13 @@ public class EventUI extends AbstractUI {
     }
 
     /**
-     * Ask user to reschedule events that had to be removed.
+     * Asks the user to reschedule events that had to be removed.
      * User should enter valid input, according to what is asked.
      *
-     * @return List of rescheduled events
+     * @param eventList This list of event to reschedule.
+     * @return The list of rescheduled events.
      */
-    public static List<Event> reloadEvents(List<Event> eventList) {
+    public static List<Event> reloadEvents(final List<Event> eventList) {
         System.out.println("\n*** RESCHEDULE EVENTS ***");
         List<Event> newList = new ArrayList<>();
 
@@ -124,7 +117,6 @@ public class EventUI extends AbstractUI {
                 System.out.print("Enter last date of representation (MM-dd): ");
                 endDate = LocalDate.parse(year + "-" + retrieveInfo());
             }
-
 
             System.out.print("Enter start time (HH[:mm]): ");
             LocalTime startTime = LocalTime.parse(retrieveInfo(), tf);
@@ -144,41 +136,36 @@ public class EventUI extends AbstractUI {
         return newList;
     }
 
-
     /**
-     * Ask user if they want to reschedule events that could not find a venue still (probably because the week is full)
-     * or delete the event (giving up on trying and scheduling it)
+     * Asks the user if they want to reschedule events that could be hosted in a venue
+     * (probably because the week is full) or delete the event (giving up on trying and scheduling it).
      *
-     * @param eventList
-     * @return Map that associates the decision to delete or not, to an event.
-     *         true means the event is cancelled; false otherwise
+     * @param eventList The list of events to handle.
+     * @return The map that associates the decision to delete or not, to an event.
+     * The decision is a boolean set to <code>true</code> if the event is cancelled; <code>false</code> otherwise.
      */
-
-    public static Map<Event, Boolean> giveUpOnEvents(List<Event> eventList) {
+    public static List<Event> giveUpOnEvents(final List<Event> eventList) {
         System.out.println("\n*** LAST CHANCE ON EVENTS ***");
         System.out.println("Do you want to try and reschedule, or cancel the following event(s) ? ('y' or 'n')");
-        Map<Event, Boolean> updateEventMap = new HashMap<>();
+        List<Event> keptEvents = new ArrayList<>();
 
         char c;
-        boolean decision;
         for (Event e : eventList) {
             System.out.print(e + ": ");
             c = retrieveInfo().charAt(0);
-            decision = c == 'y' ? true : false;
-            updateEventMap.put(e, decision);
+            if (c == 'y') keptEvents.add(e);
         }
 
-        return updateEventMap;
+        return keptEvents;
     }
 
     /**
-     * Ask user to choose a new capacity for a given event
-     * or cancel it
+     * Asks the user to choose a new capacity for a given event or cancel it.
      *
-     * @param event
-     * @return New capacity if given; -1 otherwise.
+     * @param event The event to edit.
+     * @return The new capacity if given; -1 otherwise.
      */
-    public static int tooLargeCapacity(Event event) {
+    public static int tooLargeCapacity(final Event event) {
         System.out.println("\n*** TOO LARGE CAPACITY EVENT ***");
         System.out.println(event + " has a too large capacity, no venue can host it. Do you want to change capacity ? ('y' or 'n')");
         System.out.println("WARNING: If you do not change it, the event will be cancelled!");
