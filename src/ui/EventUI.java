@@ -163,12 +163,35 @@ public class EventUI extends AbstractUI {
         char c;
         boolean decision;
         for (Event e : eventList) {
-            System.out.println(e + ": ");
+            System.out.print(e + ": ");
             c = retrieveInfo().charAt(0);
             decision = c == 'y' ? true : false;
             updateEventMap.put(e, decision);
         }
 
         return updateEventMap;
+    }
+
+    /**
+     * Ask user to choose a new capacity for a given event
+     * or cancel it
+     * 
+     * @param event
+     * @return New capacity if given
+     *         -1 otherwise.
+     */
+    public static int tooLargeCapacity(Event event) {
+        System.out.println("\n*** TOO LARGE CAPACITY EVENT ***");
+        System.out.println(event + " has a too large capacity, no venue can host it. Do you want to change capacity ? ('y' or 'n')");
+        System.out.println("WARNING: If you do not change it, the event will be cancelled!");
+
+        int capacity;
+        if (retrieveInfo().charAt(0) == 'y') {
+            System.out.print("Enter new capacity: ");
+            capacity = Integer.parseInt(retrieveInfo());
+        } else
+            capacity = -1;
+
+        return capacity;
     }
 }
