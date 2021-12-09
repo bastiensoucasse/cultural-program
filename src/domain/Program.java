@@ -180,12 +180,12 @@ public class Program {
      * @param event …
      * @return …
      */
-    private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
-        final List<Event> overlapEvents = getOverlapEvents(event, venue);
-
+    private boolean canVenueHostEventIfModifyAlt(final Venue venue, final Event event) {
         // If the venue can't host for such capacity or is closed, NO
         if (!venue.canHost(event.getCapacity())) return false;
         for (final LocalDate d : event.getDates()) if (!venue.isOpened(d.getDayOfWeek(), event.getSlot())) return false;
+
+        final List<Event> overlapEvents = getOverlapEvents(event, venue);
 
         // We want to add a concert
         if (event instanceof Concert) {
@@ -254,6 +254,66 @@ public class Program {
         }
 
         return false;
+    }
+
+    /**
+     * Checks if a venue can host a complete event if it modifies some of its own events.
+     *
+     * @param venue …
+     * @param event …
+     * @return …
+     */
+    private boolean canVenueHostEventIfModify(final Venue venue, final Event event) {
+        // If the venue can't host for such capacity or is closed, NO
+        if (!venue.canHost(event.getCapacity())) return false;
+        for (final LocalDate d : event.getDates()) if (!venue.isOpened(d.getDayOfWeek(), event.getSlot())) return false;
+
+        final List<Event> overlapEvents = getOverlapEvents(event, venue);
+        int sum = 0, concerts = 0;
+        boolean sat = false, sun = false;
+        for (Event e : overlapEvents) {
+            sum += e.getDates().size();
+            if (e instanceof Concert) concerts++;
+            if (e.isOnSaturday()) sat = true;
+            if (e.isOnSunday()) sun = true;
+        }
+
+        // --------- //
+        // ALGORITHM //
+        // --------- //
+
+        // on veut pas se mettre sur le full we
+        if (!event.isOnSaturday() || !event.isOnSunday()) {
+            // pas de collision sur le full we
+            if (!sat || !sun) {
+                // on veut ajouter un concert et y en a pas encore, OUI
+                if (event instanceof Concert && numConcerts.get(venue) == 0) return true;
+
+                // on est plus long
+                if (event.getDates().size() > sum) {
+                    // on écrase pas tous les concerts, OUI ; sinon, NON
+                    return concerts != numConcerts.get(venue);
+                }
+
+                // sinon, NON
+                return false;
+            }
+
+            // collision sur le full we, NON
+            return false;
+        }
+
+        // on veut se mettre sur le full we
+
+        // pas de collision sur le full we, OUI
+        if (!sat || !sun) return true;
+
+        // collision sur le full we
+        // on écrase tous les concerts, NON
+        if (concerts == numConcerts.get(venue)) return false;
+
+        // on est plus long, OUI, sinon NON
+        return event.getDates().size() > sum;
     }
 
     /**
